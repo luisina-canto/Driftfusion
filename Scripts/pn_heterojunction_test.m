@@ -20,14 +20,7 @@ soleq_pn_hetero = equilibrate(par_pn_hetero);
 
 %% Perform dark and light current-voltage scan at 50 mVs-1 from 0 V to 1.2 V
 % sol_CV = doCV(sol_ini, light_intensity, V0, Vmax, Vmin, scan_rate, cycles, tpoints)
-sol_CV_100mVs_pn_hetero = doCV(soleq_pn_hetero.el, 0, 0, 0.6, -0.2, 100e-3, 1, 281);
-
-%% plot the current voltage curve
-dfplot.JtotVapp(sol_CV_100mVs_pn_hetero, 0)
-hold on
-set(gca, 'YScale', 'log')
-xlim([-0.2, 0.6])
-legend('100 mVs-1') 
+sol_CV_100mVs_pn_hetero = doCV(soleq_pn_hetero.el, 1, 0, 0.6, -0.2, 100e-3, 1, 281);
 
 %% plot the energy level diagram and carrier densities for the device at
 % 1 V (t= 10s) during the illuminated forward scan
