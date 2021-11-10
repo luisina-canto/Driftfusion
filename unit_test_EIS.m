@@ -25,7 +25,7 @@
 % functions
 initialise_df
 
-input_csv = 'Input_files/spiro_mapi_tio2_lowmu.csv';
+input_csv = 'Input_files/spiro_mapi_tio2.csv';
 
 % par = pc(varargin)
 par = pc(input_csv);
