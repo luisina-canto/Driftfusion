@@ -47,17 +47,23 @@ par.N_ionic_species = 0;
 par.vsr_check = 0;
 
 %% General initial parameters
+% Set applied bias to zero
+par.V_fun_type = 'constant';
+par.V_fun_arg(1) = 0;
+
+% Set light intensities to zero
+par.int1 = 0;
+par.int2 = 0;
+par.g1_fun_type = 'constant';
+par.g2_fun_type = 'constant';
+
+% Time mesh
 par.tmesh_type = 2;
 par.tmax = 1e-12;       % This should be based on recombination rate somehow.
 par.t0 = par.tmax/1e6;
 par.tpoints = 10;
 
-par.Vapp = 0;
-par.int1 = 0;
-par.int2 = 0;
-par.g1_fun_type = 'constant';
-par.g2_fun_type = 'constant';
-par.tmesh_type = 2;
+% Series resistance
 par.Rs = 0;
 
 %% Switch off mobilities
@@ -109,7 +115,7 @@ soleq.el.par.vsr_check = 1;
 
 disp('Electronic carrier equilibration complete')
 
-if electronic_only == 0
+if electronic_only == 0 && par_origin.N_ionic_species > 0
     %% Equilibrium solutions with ion mobility switched on
     par.N_ionic_species = par_origin.N_ionic_species;
 

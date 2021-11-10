@@ -26,7 +26,7 @@ dev.sn = build_property(par.sn, xmesh, par, 'constant', 1);
 dev.sp = build_property(par.sp, xmesh, par, 'constant', 1);
 dev.mu_n = build_property(par.mu_n, xmesh, par, 'constant', 0);
 dev.mu_p = build_property(par.mu_p, xmesh, par, 'constant', 0);
-    
+
 % Linearly graded properties
 dev.Phi_EA = build_property(par.Phi_EA, xmesh, par, 'lin_graded', 0);
 dev.Phi_IP = build_property(par.Phi_IP, xmesh, par, 'lin_graded', 0);
@@ -75,11 +75,11 @@ if par.vsr_mode
     dev.taup = build_property(par.taup, xmesh, par, 'exp_graded', 0);   % These are unused with VSR_MODE = 1 but still require non-zero values
     dev.NA = build_property(par.NA, xmesh, par, 'zeroed', 0);
     dev.ND = build_property(par.ND, xmesh, par, 'zeroed', 0);
-    dev.epp = build_property(par.epp, xmesh, par, 'constant', 0); 
+    dev.epp = build_property(par.epp, xmesh, par, 'constant', 0);
     dev.ni = build_property(par.ni, xmesh, par, 'constant', 0);
     dev.nt = build_property(par.nt, xmesh, par, 'constant', 0);
     dev.pt = build_property(par.pt, xmesh, par, 'constant', 0);
-else 
+else
     dev.vsr_zone = zeros(1, length(xmesh));
     dev.srh_zone = ones(1, length(xmesh));
     dev.Field_switch = ones(1, length(xmesh));

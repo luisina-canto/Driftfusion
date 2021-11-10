@@ -62,6 +62,7 @@ structs_oc = structs_sc;
 %% generate solutions
 for i = 1:nsolutions
 
+
     struct_Int = structs_sc{1, i};
     % the asymmetricized solution could require some stabilization after
     % breaking
