@@ -10,6 +10,7 @@ function [sol_Voc, Voc] = findVocDirect(sol_ini, light_intensity, mobseti, tpoin
 % (at your option) any later version.
 % 
 %% Start code
+% sol_ill = lightonRs(sol_ini, int1, stable_time, mobseti, Rs, pnts)
 sol_Voc = lightonRs(sol_ini, light_intensity, -1, mobseti, 1e6, tpoints);
 
 Voct = dfana.calcDeltaQFL(sol_Voc);

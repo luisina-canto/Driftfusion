@@ -35,7 +35,7 @@ function [structs_oc, VOCs] = genIntStructsVoc(struct_eq, startInt, endInt, poin
 % it under the terms of the GNU Affero General Public License as published
 % by the Free Software Foundation, either version 3 of the License, or
 % (at your option) any later version.
-% 
+%
 % Ilario Gelmetti, Ph.D. student, perovskite photovoltaics
 % Institute of Chemical Research of Catalonia (ICIQ)
 % Research Group Prof. Emilio Palomares
@@ -61,31 +61,19 @@ structs_oc = structs_sc;
 
 %% generate solutions
 for i = 1:nsolutions
-    
-    % decrease annoiance by figures popping up
-    %SCStructCell{1, i}.par.figson = 0;
-    
+
     struct_Int = structs_sc{1, i};
     % the asymmetricized solution could require some stabilization after
     % breaking
     %struct_Int = stabilize(struct_Int);
-    
+
     % use findVocOptim for finding the applied voltage that minimizes the
     % residual current
     disp([mfilename ' - finding real Voc for illumination intensity ' num2str(structs_sc{1, i}.par.int1)])
 
-    % if solution seems at short circuit, estimate a voltage based on int1
-    % illumination
-    if abs(struct_Int.par.Vapp) < 0.1
-        % findVocDirect could be used but it's slow
-        %[~, guessVoc] = findVocDirect(struct_Int, struct_Int.par.int1, 1);
-
-        % very rough estimation of guessVoc
-        guessVoc = 1 + 0.035 * log(struct_Int.par.int1 - 0.0002);
-        [struct_Int_Voc, VOC] = findVocOptim(struct_Int, guessVoc);
-    else
-        [struct_Int_Voc, VOC] = findVocOptim(struct_Int);
-    end
+    [struct_Int_Rs, VOC] = findVocDirect(struct_Int, struct_Int.par.int1, true, 5);
+    struct_Int_Voc = RsToClosedCircuit(struct_Int_Rs);
+    %[struct_Int_Voc, VOC] = findVocOptim(struct_Int_Voc, guessVoc);
 
     % replace the solution at the bad VOC with the new one
     structs_oc{1, i} = struct_Int_Voc;
