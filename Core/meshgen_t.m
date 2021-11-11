@@ -28,6 +28,10 @@ switch par.tmesh_type
         t2 = t1(end) + logspace(log10(par.t0),log10(par.tmax/2),round(par.tpoints/2));
         t2(end) = par.tmax;
         t = [t1, t2];
+    case 'log10-inverse'
+        t = fliplr(par.tmax - logspace(log10(par.t0),log10(par.tmax), par.tpoints));
+        t(1) = 0;
+        t(end) = par.tmax;
 end
 
 end

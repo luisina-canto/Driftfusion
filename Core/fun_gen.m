@@ -32,9 +32,11 @@ switch fun_type
     case 'sweep'
         fun = @(coeff, t) coeff(1) + (coeff(2)-coeff(1))*t/coeff(3);
     case 'square'
-        % Generate intensity array
+        % COEFF = [A_low, A_high, time_period, duty_cycle]
+        % Duty cycle is stated as a percentage
         fun = @(coeff, t) coeff(1) + (coeff(2)-coeff(1))*lt(mod(t,coeff(3))*1/coeff(3),coeff(4)/100);
     case 'sin'
+        % COEFF = [DC_offset, Delta_AC, frequency, phase]
         fun = @(coeff, t) coeff(1) + coeff(2)*(sin(2*pi*coeff(3)*t + coeff(4)));
     case 'tri'
         % COEFF = [OFFSET, V1, V2, periods, tperiod]  tmax is defined by the input

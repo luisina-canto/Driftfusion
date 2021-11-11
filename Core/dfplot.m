@@ -86,7 +86,24 @@ classdef dfplot
             set(legend,'FontSize',16);
             set(legend,'EdgeColor',[1 1 1]);
         end
+        
+        function Jtott(sol, xpos)
+            % Currents as a function of time
+            % SOL = solution structure
+            % XPOS = the readout position
+            [~,t,~,~,~,~,~,~,~,~] = dfana.splitsol(sol);
 
+            [J, j, xmesh] = dfana.calcJ(sol);
+            ppos = getpointpos(xpos, xmesh);
+
+            figure(201);
+            plot(t, J.tot(:, ppos));
+            xlabel('time [s]');
+            ylabel('J [A cm^{-2}]');
+            set(legend,'FontSize',16);
+            set(legend,'EdgeColor',[1 1 1]);
+        end
+        
         function Jx(varargin)
             % Plots the current components
             % VARARGIN = [SOL, TARR, XRANGE]

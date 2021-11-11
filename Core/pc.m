@@ -443,11 +443,11 @@ classdef pc
                         par.tmesh_type = 'log10';
                 end
             elseif isa(value, 'cell')
-                if any(strcmp(value, {'linear', 'log10', 'log10-double'}))
+                if any(strcmp(value, {'linear', 'log10', 'log10-double', 'log10-inverse'}))
                     par.tmesh_type = value{1};
                 end
             elseif isa(value, 'char')
-                if any(strcmp(value, {'linear', 'log10', 'log10-double'}))
+                if any(strcmp(value, {'linear', 'log10', 'log10-double', 'log10-inverse'}))
                     par.tmesh_type = value;
                 end
             else
