@@ -26,7 +26,7 @@ end
 
 Zreal = 1./Yreal;
 Zimag = 1./Yimag;
-
+Zimag_av = movmean(Zimag, 20);
 if figson
 %     figure(540)
 %     semilogx(t, Vappt)
@@ -39,7 +39,7 @@ if figson
     ylabel('Current density, J [A cm-2]')
     
     figure(542)
-    loglog(1./t, (1./(omega.*Zimag)))
+    loglog(1./t, (1./(omega.*Zimag)), 1./t, (1./(omega.*Zimag_av)), 'k')
     xlabel('Frequency [Hz]')
     ylabel('Zimag-1 omega-1')
     legend('raw', 'smoothed')
