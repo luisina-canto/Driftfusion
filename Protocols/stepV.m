@@ -1,7 +1,14 @@
-function sol_stepV = stepV(sol_in, DeltaV, t0, tmax, tpoints, figson)
+function sol_stepV = stepV(sol_in, DeltaV, int, t0, tmax, tpoints)
 % Alternative to jumptoV using Ilario's excellent 'sweepAndStill' function
 % N is number of periods over which FT is calculated
 par = sol_in.par;
+
+if int ~= 0
+    sol = lightonRs(sol_in, int, -1, 1, 0, 40);
+else
+    sol = sol_in;
+end
+
 par.tmesh_type = 'log10';
 par.tmax = tmax;
 par.t0 = t0;
@@ -13,8 +20,10 @@ par.V_fun_type = 'sweepAndStill';
 V0 = getVend(sol_in);
 par.V_fun_arg(1) = V0;
 par.V_fun_arg(2) = V0 + DeltaV;
-par.V_fun_arg(3) = t(3);
+par.V_fun_arg(3) = t(2);            % Sweeps between 0 and first non-zero time point
 
-sol_stepV = df(sol_in, par);
+disp('Performing voltage step')
+sol_stepV = df(sol, par);
+disp('complete')
 
 end
