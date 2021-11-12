@@ -2,7 +2,7 @@ function sol_stepV = stepV(sol_in, DeltaV, int, t0, tmax, tpoints)
 % Alternative to jumptoV using Ilario's excellent 'sweepAndStill' function
 % N is number of periods over which FT is calculated
 if int ~= 0
-    sol = lightonRs(sol_in, int, -1, 1, 0, 40);
+    sol = lightonRs(sol_in, int, -1, 1, 0, 10);
 else
     sol = sol_in;
 end

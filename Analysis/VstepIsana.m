@@ -13,39 +13,38 @@ V0 = par.V_fun_arg(1);
 DeltaV = par.V_fun_arg(2) - V0;
 
 J = dfana.calcJ(sol_stepV);
-DeltaJ = J.tot(end, 1) - J.tot(1, 1);
-Jt = J.tot((tsol > tstep),1)';
+DeltaJ = abs(J.tot(end, 1) - J.tot(1, 1));
+Jt = abs(J.tot((tsol > tstep), 1))';
 
 N = length(t);
 omega = 2*pi./t;
 % Fourier transform
 for i = 1:N
-    Yreal(i) = (DeltaJ/DeltaV) + (1/DeltaV).*trapz(Jt(1:N-1).*diff(cos(omega(i).*t)));
-    Yimag(i) = (1/DeltaV).*trapz(Jt(1:N-1).*diff(sin(omega(i).*t)));
+    Yreal(i) = (DeltaJ/DeltaV) + (1/DeltaV).*sum(Jt(1:N-1).*(cos(omega(i).*t(1:N-1)) - cos(omega(i).*t(2:N))));
+    Yimag(i) = (1/DeltaV).*sum(Jt(1:N-1).*(sin(omega(i).*t(2:N)) - sin(omega(i).*t(1:N-1))));
 end
 
 Zreal = 1./Yreal;
 Zimag = 1./Yimag;
-Zimag_av = movmean(Zimag, 20);
+
 if figson
-%     figure(540)
+%     figure(50)
 %     semilogx(t, Vappt)
 %     xlabel('Time [s]')
 %     ylabel('Vapp [V]')
     
-    figure(541)
+    figure(51)
     semilogx(t, J.tot((tsol > tstep),1))
     xlabel('Time [s]')
     ylabel('Current density, J [A cm-2]')
     
-    figure(542)
-    loglog(1./t, (1./(omega.*Zimag)), 1./t, (1./(omega.*Zimag_av)), 'k')
+    figure(52)
+    loglog(1./t, (1./(omega.*Zimag)))
     xlabel('Frequency [Hz]')
-    ylabel('Zimag-1 omega-1')
-    legend('raw', 'smoothed')
+    ylabel('imag(Z^{-1}) \omega^{-1}')
 
-    figure(543)
+    figure(53)
     semilogx(1./t, Zreal)
     xlabel('Frequency [Hz]')
-    ylabel('Zreal')
+    ylabel('real(Z)')
 end
