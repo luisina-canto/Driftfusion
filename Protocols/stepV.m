@@ -1,6 +1,12 @@
 function sol_stepV = stepV(sol_in, DeltaV, int, t0, tmax, tpoints)
 % Alternative to jumptoV using Ilario's excellent 'sweepAndStill' function
 % N is number of periods over which FT is calculated
+% DELTAV = Change in voltage from the initial voltage in SOL_IN
+% INT = Light intensity
+% T0 = first time point after zero and time at which the voltage has changed
+% TMAX = Maximum time
+% TPOINTS = Number of time points
+
 if int ~= 0
     sol = lightonRs(sol_in, int, -1, 1, 0, 10);
 else
