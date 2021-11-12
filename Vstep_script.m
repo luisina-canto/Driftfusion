@@ -9,7 +9,7 @@ t0 = 1e-8;
 tmax = 1e2;
 tpoints = 400;
 DeltaV = 0.2;
-intsarr = [0, 1e-2, 1];
+intsarr = [0, 1e-3, 1e-2, 1e-1, 1];
 %%
 for i = 1:length(intsarr)
     sol_stepV(i) = stepV(soleq.ion, DeltaV, intsarr(i), t0, tmax, tpoints);

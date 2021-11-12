@@ -18,7 +18,7 @@ Jt = abs(J.tot((tsol > tstep), 1))';
 
 N = length(t);
 omega = 2*pi./t;
-% Fourier transform
+% Fourier transform - broken into time units 
 for i = 1:N
     Yreal(i) = (DeltaJ/DeltaV) + (1/DeltaV).*sum(Jt(1:N-1).*(cos(omega(i).*t(1:N-1)) - cos(omega(i).*t(2:N))));
     Yimag(i) = (1/DeltaV).*sum(Jt(1:N-1).*(sin(omega(i).*t(2:N)) - sin(omega(i).*t(1:N-1))));
