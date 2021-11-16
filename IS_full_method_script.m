@@ -29,30 +29,35 @@ input_csv = 'Input_files/spiro_mapi_tio2.csv';
 
 % par = pc(varargin)
 par = pc(input_csv);
+
+par.Ncat = [1e17, 1e17, 1e17, 1e17, 1e17];
+% Everytime you change your parameters in a script use this function:
+par = refresh_device(par);
+
 % soleq = equilibrate(varargin)
 soleq = equilibrate(par);
 
-% [structCell, V_array, J_array] = genIntStructs(struct_eq, startInt, endInt, points, include_dark)
-structs_sc = genIntStructs(soleq.ion, 1e-3, 1, 5, true);
+%% Obtain open circuit initial condition
+% sol_ill = lightonRs(sol_ini, int1, stable_time, mobseti, Rs, pnts)
+sol_Rs1e6 = lightonRs(soleq.ion, 0.2, -100, 1, 1e6, 100);
+sol_OC = RsToClosedCircuit(sol_Rs1e6);
+structs_sc(1) = sol_OC;
 
 %% Scripts IS, helper and analysis
 % IS_results = IS_script(structs, startFreq, endFreq, Freq_points, deltaV, frozen_ions, demodulation, do_graphics)
-% one input
-IS_script(soleq.ion, 1e9, 1e-2, 3, 2e-3, false, true, true);
-% many inputs
-IS_sc = IS_script(structs_sc, 1e8, 1e2, 3, 2e-3, false, true, true);
+sol_IS = IS_script(structs_sc, 1e6, 1e-2, 3, 2e-3, false, true, true);
 
 % IS_script_exporter(prefix, IS_results)
-IS_script_exporter('unit_testing_deleteme', IS_sc)
+IS_script_exporter('unit_testing_deleteme', sol_IS)
 
 % IS_script_plot_impedance(IS_results)
-IS_script_plot_impedance(IS_sc)
+IS_script_plot_impedance(sol_IS)
 
 % IS_script_plot_nyquist(IS_results)
-IS_script_plot_nyquist(IS_sc)
+IS_script_plot_nyquist(sol_IS)
 
 % IS_script_plot_phase(IS_results)
-IS_script_plot_phase(IS_sc)
+IS_script_plot_phase(sol_IS)
 
 %% Scripts IS non parallel and analysis
 

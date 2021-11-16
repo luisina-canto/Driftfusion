@@ -11,6 +11,7 @@ function sol_closed = RsToClosedCircuit(sol_Rs)
 % by the Free Software Foundation, either version 3 of the License, or
 % (at your option) any later version.
 % 
+disp('Switching to closed circuit')
 par = sol_Rs.par;
 
 % Get QFL splitting at electrode of SOL_RS
@@ -18,7 +19,8 @@ QFLsplit_t = dfana.calcDeltaQFL(sol_Rs);
 QFLsplit = QFLsplit_t(end);
 
 par.Rs = 0;
-par.Vapp = QFLsplit;
+par.V_fun_arg(1) = QFLsplit;
+par.V_fun_type = 'constant';
 % Characteristic diffusion time
 t_diff = (par.dcum0(end)^2)/(2*par.kB*par.T*min(min(par.mu_n), min(par.mu_p)));
 par.tmax = t_diff;
@@ -26,5 +28,5 @@ par.t0 = par.tmax/1e6;
 par.tmesh_type = 2;
 
 sol_closed = df(sol_Rs, par);
-
+disp('Complete')
 end
