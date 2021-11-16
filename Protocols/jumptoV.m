@@ -77,6 +77,14 @@ par.V_fun_arg(1) = Vjump;
 par.g1_fun_type = 'constant';
 par.g1_fun_arg(1) = Int;        % For future proof
 par.int1 = Int;
+par.tmax = 100*t_diff;
+par.t0 = par.tmax/1e8;
+par.tmesh_type = 2;
+par.tpoints = 20;
+
+disp('Illumination stage...')
+sol_lighton = df(jump1, par);
+disp('Complete')
 
 par.mobseti = mobseti;
 par.tmax = tdwell;
@@ -85,7 +93,7 @@ par.tmesh_type = 2;
 par.tpoints = 200;
 
 disp('Dwell stage...')
-sol = df(jump1, par);
+sol = df(sol_lighton, par);
 
 j = 1;
 if stabilise
