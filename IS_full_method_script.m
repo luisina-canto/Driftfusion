@@ -67,7 +67,7 @@ end
 %% Scripts IS, helper and analysis
 startFreq = 1e6;
 endFreq = 1e-2;
-Freq_points = 3;
+Freq_points = 12;
 deltaV = 2e-3;
 frozen_ions = false;
 demodulation = true;
