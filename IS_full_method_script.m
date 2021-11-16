@@ -30,22 +30,40 @@ input_csv = 'Input_files/spiro_mapi_tio2.csv';
 % par = pc(varargin)
 par = pc(input_csv);
 
-par.Ncat = [1e17, 1e17, 1e17, 1e17, 1e17];
-% Everytime you change your parameters in a script use this function:
-par = refresh_device(par);
+% Ncat_arr = [1e15, 1e16, 1e17, 1e18, 1e19];
+Ncat_arr = [1e15];
+for i = 1:length(Ncat_arr)
+    par_struct(i) = par;
+    
+    par_struct(i).Ncat = [Ncat_arr(i), Ncat_arr(i), Ncat_arr(i), Ncat_arr(i), Ncat_arr(i)];
+    % Everytime you change your parameters in a script use this function:
+    par_struct(i) = refresh_device(par_struct(i));
+    % soleq = equilibrate(varargin)
+    soleq(i) = equilibrate(par_struct(i));
+end
 
-% soleq = equilibrate(varargin)
-soleq = equilibrate(par);
-
-%% Obtain open circuit initial condition
-% sol_ill = lightonRs(sol_ini, int1, stable_time, mobseti, Rs, pnts)
-sol_Rs1e6 = lightonRs(soleq.ion, 0.2, -100, 1, 1e6, 100);
-sol_OC = RsToClosedCircuit(sol_Rs1e6);
-structs_sc(1) = sol_OC;
+for i = 1:length(Ncat_arr)
+    %% Obtain open circuit initial condition
+    % sol_ill = lightonRs(sol_ini, int1, stable_time, mobseti, Rs, pnts)
+    sol_Rs1e6(i) = lightonRs(soleq(i).ion, 0.2, -100, 1, 1e6, 100);
+    sol_OC(i) = RsToClosedCircuit(sol_Rs1e6(i));
+end
 
 %% Scripts IS, helper and analysis
-% IS_results = IS_script(structs, startFreq, endFreq, Freq_points, deltaV, frozen_ions, demodulation, do_graphics)
-sol_IS = IS_script(structs_sc, 1e6, 1e-2, 3, 2e-3, false, true, true);
+startFreq = 1e6;
+endFreq = 1e-2;
+Freq_points = 3;
+deltaV = 2e-3;
+frozen_ions = false;
+demodulation = true;
+do_graphics = true;
+for i = 1:length(Ncat_arr)
+    % IS_results = IS_script(structs, startFreq, endFreq, Freq_points, deltaV, frozen_ions, demodulation, do_graphics)
+    sol_IS_SC(i) = IS_script(soleq(i).ion, startFreq, endFreq, Freq_points, deltaV, frozen_ions, demodulation, do_graphics);
+    
+    % IS_results = IS_script(structs, startFreq, endFreq, Freq_points, deltaV, frozen_ions, demodulation, do_graphics)
+    sol_IS_OC(i) = IS_script(sol_OC(i), startFreq, endFreq, Freq_points, deltaV, frozen_ions, demodulation, do_graphics);
+end
 
 % IS_script_exporter(prefix, IS_results)
 IS_script_exporter('unit_testing_deleteme', sol_IS)
