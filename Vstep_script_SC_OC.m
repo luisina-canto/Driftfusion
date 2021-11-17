@@ -5,12 +5,12 @@ par = pc('Input_files/spiro_mapi_tio2.csv');
 soleq = equilibrate(par);
 
 %% Input parameters for the current transient
-t0 = 1e-12;
+t0 = 1e-10;
 tmax = 1e2;
 tpoints = 800;
-DeltaV_SC = 0.05;
-DeltaV_OC = 0.05;
-intsarr = [1];
+DeltaV_SC = 20e-3;
+DeltaV_OC = 20e-3;
+intsarr = [0, 1e-2, 1];
 %%
 for i = 1:length(intsarr)
     if intsarr(i) == 0
@@ -34,7 +34,7 @@ for i = 1:length(intsarr)
     figure(51)
     hold on
     figure(52)
-    hold onw
+    hold on
     figure(53)
     hold on
 end
@@ -48,18 +48,20 @@ for i = 1:length(intsarr)
     hold on
     figure(53)
     hold on
+    figure(54)
+    hold on
 end
 %%
 legendCell = cellstr(num2str(intsarr', '%-d Sun'));
 figure(51)
 legend(legendCell)
-xlim([t0, tmax])
 hold off
 figure(52)
 legend(legendCell)
-xlim([1/tmax, 1/t0])
 hold off
 figure(53)
 legend(legendCell)
-xlim([1/tmax, 1/t0])
+hold off
+figure(54)
+legend(legendCell)
 hold off

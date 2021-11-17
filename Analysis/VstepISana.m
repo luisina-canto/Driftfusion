@@ -1,6 +1,6 @@
 function [Zreal, Zimag, Zmag, Zphase] = VstepISana(sol_stepV, figson)
 % F_CUTOFF = Cutoff frequency for plots
-
+tic
 disp('Starting Vstep IS analysis')
 par = sol_stepV.par;
 
@@ -23,8 +23,8 @@ N = length(t);
 omega = 2*pi./t;
 % Fourier transform method from Neukom 2019 Thesis, Section 8.1.1
 for i = 1:N
-    Yreal(i) = (DeltaJ/DeltaV) + (1/DeltaV).*trapz(Jt(1:N-1).*(cos(omega(i).*t(1:N-1)) - cos(omega(i).*t(2:N))));
-    Yimag(i) = (1/DeltaV).*trapz(Jt(1:N-1).*(sin(omega(i).*t(2:N)) - sin(omega(i).*t(1:N-1))));
+    Yreal(i) = (DeltaJ/DeltaV) + (1/DeltaV).*sum(Jt(1:N-1).*(abs(cos(omega(i).*t(1:N-1))) - abs(cos(omega(i).*t(2:N)))));
+    Yimag(i) = (1/DeltaV).*sum(Jt(1:N-1).*(abs(sin(omega(i).*t(2:N))) - abs(sin(omega(i).*t(1:N-1)))));
 end
 
 Zreal = 1./Yreal;
@@ -65,4 +65,5 @@ if figson
 end
 
 disp('Vstep IS analysis complete')
+toc
 end
