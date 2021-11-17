@@ -5,12 +5,12 @@ par = pc('Input_files/spiro_mapi_tio2.csv');
 soleq = equilibrate(par);
 soleq.ion.par.MaxStepFactor = 0.1;
 
-%% Set up 1
+%% Input parameters for the current transient
 t0 = 1e-7;
 tmax = 1e2;
 tpoints = 1000;
-DeltaV = 0.02;
-intsarr = [0, 1];%[0, 1e-3, 1e-2, 1e-1, 1];
+DeltaV = 0.1;
+intsarr = [0, 0.2];
 %%
 for i = 1:length(intsarr)
     sol_stepV(i) = stepV(soleq.ion, DeltaV, intsarr(i), t0, tmax, tpoints);

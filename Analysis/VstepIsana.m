@@ -4,20 +4,17 @@ par = sol_stepV.par;
 tstep = par.V_fun_arg(3);
 
 tsol = sol_stepV.t;
-t = tsol(tsol > tstep); % Remove initial ramp
-t = t - t(1);           % Zeroing
-Vfun = fun_gen(par.V_fun_type);
-Vapp = Vfun(par.V_fun_arg, tsol);
-Vappt = Vapp(tsol > tstep);
-
+t = tsol;               
+t = t(2:end) - t(2);            % Remove initial ramp
 V0 = par.V_fun_arg(1);
 DeltaV = par.V_fun_arg(2) - V0;
 
 J = dfana.calcJ(sol_stepV);
-DeltaJ = abs(J.tot(end, 1) - J.tot(1, 1));
-Jt = (J.tot((tsol > tstep), 1))';
+Jt = (J.tot(:, 1))';
+Jt = Jt(2:end);                 % Remove initial ramp
 % zeroing
-Jt = (Jt - Jt(end));
+Jt = abs(Jt - Jt(end));
+DeltaJ = abs(Jt(end) - Jt(1));
 
 N = length(t);
 omega = 2*pi./t;
@@ -47,7 +44,9 @@ if figson
     ylabel('imag(Z^{-1}) \omega^{-1}')
 
     figure(53)
+    %yyaxis left
     semilogx(1./t, Zreal)
     xlabel('Frequency [Hz]')
     ylabel('real(Z)')
+        
 end
