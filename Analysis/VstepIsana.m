@@ -4,7 +4,8 @@ par = sol_stepV.par;
 tstep = par.V_fun_arg(3);
 
 tsol = sol_stepV.t;
-t = tsol(tsol > tstep);
+t = tsol(tsol > tstep); % Remove initial ramp
+t = t - t(1);           % Zeroing
 Vfun = fun_gen(par.V_fun_type);
 Vapp = Vfun(par.V_fun_arg, tsol);
 Vappt = Vapp(tsol > tstep);
@@ -14,7 +15,9 @@ DeltaV = par.V_fun_arg(2) - V0;
 
 J = dfana.calcJ(sol_stepV);
 DeltaJ = abs(J.tot(end, 1) - J.tot(1, 1));
-Jt = abs(J.tot((tsol > tstep), 1))';
+Jt = (J.tot((tsol > tstep), 1))';
+% zeroing
+Jt = (Jt - Jt(end));
 
 N = length(t);
 omega = 2*pi./t;
@@ -34,7 +37,7 @@ if figson
 %     ylabel('Vapp [V]')
     
     figure(51)
-    semilogx(t, J.tot((tsol > tstep),1))
+    loglog(t, Jt)
     xlabel('Time [s]')
     ylabel('Current density, J [A cm-2]')
     
