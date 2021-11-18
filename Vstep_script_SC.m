@@ -1,23 +1,20 @@
 initialise_df
 
 %% Load parameters
-par = pc('Input_files/spiro_mapi_tio2_IS.csv');
+par = pc('Input_files/spiro_mapi_tio2.csv');
 soleq = equilibrate(par);
 
 %% Input parameters for the current transient
-t0 = 1e-10;
-tmax = 1e2;
-tpoints = 600;
-DeltaV_SC = 20e-3;
-intsarr = [0, 1];
+t0 = 1e-10;              % Initial time after zero. The voltage steps at t = 0 and reaches V0 + DeltaV at t = t0
+tmax = 10;              % End time to capture to
+tpoints = 1000;         % Number of time points for the voltage step (log spacing)
+DeltaV_SC = 10e-3;      % Voltage step
+intsarr = [0, 1];       % Array of light intensities at which the solution will be calculated
 
 %%
-for i = 1:length(intsarr)
-    if intsarr(i) == 0
-        sol_SC(i) = soleq.ion;
-    else      
-        sol_SC(i) = lightonRs(soleq.ion, intsarr(i), -100, 1, 0, 10);
-    end
+for i = 1:length(intsarr) 
+    sol_SC(i) = lightonRs(soleq.ion, intsarr(i), -1, 1, 1e6, 10);       % These two lines are necessary to get close to zero current condition
+    sol_SC(i) = RsToClosedCircuit(sol_Rs1e6(i));
     sol_stepV_SC(i) = stepV(sol_SC(i), DeltaV_SC, t0, tmax, tpoints);
 end
 

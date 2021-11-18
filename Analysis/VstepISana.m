@@ -39,7 +39,7 @@ Zphase = rad2deg(atan2(-Zimag, Zreal)) - 90;
 
 if figson
     figure(51)
-    loglog(tsol, J.tot(:,1))
+    loglog(t, Jt)
     xlabel('Time [s]')
     ylabel('Current density, J [A cm-2]')
     xlim([t(1), t(end)])
