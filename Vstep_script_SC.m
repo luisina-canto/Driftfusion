@@ -1,28 +1,29 @@
 initialise_df
 
 %% Load parameters
-par = pc('Input_files/spiro_mapi_tio2.csv');
+par = pc('Input_files/spiro_mapi_tio2_IS.csv');
 soleq = equilibrate(par);
 
 %% Input parameters for the current transient
-t0 = 1e-11;
+t0 = 1e-10;
 tmax = 1e2;
-tpoints = 1000;
-DeltaV = 0.05;
-intsarr = [0, 1e-3, 1e-2, 1e-1, 1];
+tpoints = 600;
+DeltaV_SC = 20e-3;
+intsarr = [0, 1];
+
 %%
 for i = 1:length(intsarr)
     if intsarr(i) == 0
         sol_SC(i) = soleq.ion;
-    else
+    else      
         sol_SC(i) = lightonRs(soleq.ion, intsarr(i), -100, 1, 0, 10);
     end
-    sol_stepV_SC(i) = stepV(sol_SC(i), DeltaV, t0, tmax, tpoints);
+    sol_stepV_SC(i) = stepV(sol_SC(i), DeltaV_SC, t0, tmax, tpoints);
 end
 
 %% Analysis SC
 for i = 1:length(intsarr)
-    VstepISana(sol_stepV_SC(i), 1);
+    VstepISana(sol_SC(i), sol_stepV_SC(i), 1);
     figure(51)
     hold on
     figure(52)
@@ -30,6 +31,8 @@ for i = 1:length(intsarr)
     figure(53)
     hold on
     figure(54)
+    hold on
+    figure(55)
     hold on
 end
 
