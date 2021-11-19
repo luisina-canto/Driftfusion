@@ -46,7 +46,7 @@ Ncat_arr = [1e15,1e16];
 for i = 1:length(Ncat_arr)
     par_struct(i) = par;
     
-    % par_struct(i).Ncat = [Ncat_arr(i), Ncat_arr(i), Ncat_arr(i), Ncat_arr(i), Ncat_arr(i)];
+    par_struct(i).Ncat = [Ncat_arr(i), Ncat_arr(i), Ncat_arr(i), Ncat_arr(i), Ncat_arr(i)];
     
     %par_struct(i).EF0(1) = EF0_arr(i);
     %par_struct(i).Phi_left = EF0_arr(i);
