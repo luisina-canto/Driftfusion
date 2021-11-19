@@ -10,7 +10,7 @@ function sol_closed = RsToClosedCircuit(sol_Rs)
 % it under the terms of the GNU Affero General Public License as published
 % by the Free Software Foundation, either version 3 of the License, or
 % (at your option) any later version.
-% 
+%
 disp('Switching to closed circuit')
 par = sol_Rs.par;
 
@@ -19,8 +19,8 @@ QFLsplit_t = dfana.calcDeltaQFL(sol_Rs);
 QFLsplit = QFLsplit_t(end);
 
 par.Rs = 0;
-par.V_fun_arg(1) = QFLsplit;
 par.V_fun_type = 'constant';
+par.V_fun_arg(1) = QFLsplit;
 % Characteristic diffusion time
 t_diff = (par.dcum0(end)^2)/(2*par.kB*par.T*min(min(par.mu_n), min(par.mu_p)));
 par.tmax = t_diff;
