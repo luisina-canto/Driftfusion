@@ -50,7 +50,8 @@ jet_matrix = jet(length(legend_text) + 1);
 jet_yellow_logical = ismember(jet_matrix, [1, 1, 0], 'rows');
 jet_no_yellow = jet_matrix(~jet_yellow_logical, :);
 jet_no_yellow_flip = flipud(jet_no_yellow);
-Int_colors = colormap(default);
+colormap summer ;
+Int_colors = colormap;
 
 % round to two significant digits
 legend_flip = round(legend_text, 2, 'significant');

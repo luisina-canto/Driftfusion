@@ -41,15 +41,15 @@ par = pc(input_csv);
 
 % EF0_arr = [-4.6, -4.7, -4.8];
 % Ncat_arr = [1e15, 1e16, 1e17, 1e18, 1e19];
-EF0_arr = -4.7;
-Ncat_arr = [1e15];
+%EF0_arr = -4.7;
+Ncat_arr = [1e15,1e16];
 for i = 1:length(Ncat_arr)
     par_struct(i) = par;
     
     % par_struct(i).Ncat = [Ncat_arr(i), Ncat_arr(i), Ncat_arr(i), Ncat_arr(i), Ncat_arr(i)];
     
-    par_struct(i).EF0(1) = EF0_arr(i);
-    par_struct(i).Phi_left = EF0_arr(i);
+    %par_struct(i).EF0(1) = EF0_arr(i);
+    %par_struct(i).Phi_left = EF0_arr(i);
     
     % Everytime you change your parameters in a script use this function:
     par_struct(i) = refresh_device(par_struct(i));
@@ -82,17 +82,18 @@ end
 
 %% Analysis plots
 % IS_script_exporter(prefix, IS_results)
-IS_script_exporter('unit_testing_deleteme', sol_IS_OC(i))
+for i = 1:length(Ncat_arr)
+    %IS_script_exporter('unit_testing_deleteme', sol_IS_OC(i))
 
-% IS_script_plot_impedance(IS_results)
-IS_script_plot_impedance(sol_IS_OC(i))
+    % IS_script_plot_impedance(IS_results)
+    IS_script_plot_impedance(sol_IS_OC(i))
 
-% IS_script_plot_nyquist(IS_results)
-IS_script_plot_nyquist(sol_IS_OC(i))
+    % IS_script_plot_nyquist(IS_results)
+    %IS_script_plot_nyquist(sol_IS_OC(i))
 
-% IS_script_plot_phase(IS_results)
-IS_script_plot_phase(sol_IS_OC(i))
-
+    % IS_script_plot_phase(IS_results)
+    %IS_script_plot_phase(sol_IS_OC(i))
+end 
 %% Scripts IS non parallel and analysis
 
 % % IS_results = IS_script_nonparallel(structs, startFreq, endFreq, Freq_points, deltaV, sequential, frozen_ions, demodulation, do_graphics, save_solutions)
