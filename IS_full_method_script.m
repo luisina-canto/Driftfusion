@@ -42,7 +42,7 @@ par = pc(input_csv);
 % EF0_arr = [-4.6, -4.7, -4.8];
 % Ncat_arr = [1e15, 1e16, 1e17, 1e18, 1e19];
 %EF0_arr = -4.7;
-Ncat_arr = [1e15,1e16];
+Ncat_arr = [1e17,1e18,1e19];
 for i = 1:length(Ncat_arr)
     par_struct(i) = par;
     
@@ -60,7 +60,7 @@ end
 for i = 1:length(Ncat_arr)
     %% Obtain open circuit initial condition
     % sol_ill = lightonRs(sol_ini, int1, stable_time, mobseti, Rs, pnts)
-    sol_Rs1e6(i) = lightonRs(soleq(i).ion, 0.2, -100, 1, 1e6, 100);
+    sol_Rs1e6(i) = lightonRs(soleq(i).ion, 0.5, -100, 1, 1e6, 100);
     sol_OC(i) = RsToClosedCircuit(sol_Rs1e6(i));
 end
 
@@ -86,8 +86,8 @@ for i = 1:length(Ncat_arr)
     %IS_script_exporter('unit_testing_deleteme', sol_IS_OC(i))
 
     % IS_script_plot_impedance(IS_results)
-    IS_script_plot_impedance(sol_IS_OC(i))
-
+    IS_script_plot_impedance(sol_IS_OC(i),i,Ncat_arr(i))
+    
     % IS_script_plot_nyquist(IS_results)
     %IS_script_plot_nyquist(sol_IS_OC(i))
 

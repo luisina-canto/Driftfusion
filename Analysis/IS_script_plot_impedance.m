@@ -1,4 +1,4 @@
-function IS_script_plot_impedance(IS_results)
+function IS_script_plot_impedance(IS_results,loop,change)
 %IS_SCRIPT_PLOT_IMPEDANCE - Represents Bode plots of impedance and capacitance from impedance spectroscopy
 % Plot the value of absolute impedance magnitude |Z|, resistance Z'
 % (real component), reactance Z'' (imaginary component), and apparent
@@ -50,7 +50,6 @@ jet_matrix = jet(length(legend_text) + 1);
 jet_yellow_logical = ismember(jet_matrix, [1, 1, 0], 'rows');
 jet_no_yellow = jet_matrix(~jet_yellow_logical, :);
 jet_no_yellow_flip = flipud(jet_no_yellow);
-colormap summer ;
 Int_colors = colormap;
 
 % round to two significant digits
@@ -70,30 +69,39 @@ h = zeros(length(legend_text), 1);
 xlim_array = [min(min(IS_results.Freq))*0.99, max(max(IS_results.Freq)*1.01)];
 
 %% plot apparent capacitance vs frequency
-figure('Name', 'IS at light intensities. Dashed: ionic; dotted: recombination; dashdotted: stored charge variation', 'NumberTitle', 'off');
-    hold off
+
+
+
+
+figure('Name', 'IS at light intensities. Dashed: ionic; dotted: recombination; dashdotted: stored charge variation', 'NumberTitle', 'on');
+    hold on
     for i = 1:length(legend_text)
+        legend_flip
+        figure(2)
+        leg = join(["Ncat =", string(change)]);
         h(i) = plot(IS_results.Freq(i, :), IS_results.cap(i, :)',...
-            'Color', Int_colors(i, :), 'MarkerEdgeColor', Int_colors(i, :),...
-            'MarkerFaceColor', Int_colors(i, :), 'Marker', 's',...
-            'MarkerSize', 3, 'LineWidth', 1.3);
+            'Color', Int_colors(loop*25,:), 'MarkerEdgeColor', Int_colors(loop*25, :),...
+            'MarkerFaceColor', Int_colors(loop*25, :), 'Marker', 's',...
+            'MarkerSize', 3, 'LineWidth', 1.3,'DisplayName',leg);
+        legend;
         hold on
         % for plotting the negative capacitance
         plot(IS_results.Freq(i, :), -IS_results.cap(i, :)',...
-            'Color', Int_colors(i, :), 'MarkerEdgeColor', Int_colors(i, :),...
+            'Color', Int_colors(loop*25, :), 'MarkerEdgeColor', Int_colors(loop*25, :),...
             'MarkerFaceColor', 'White', 'Marker', 's',...
             'MarkerSize', 7, 'LineWidth', 1.3);
         if isfield(IS_results, 'cap_ion_disp')
             % capacitance due to ions
-            plot(IS_results.Freq(i, :), IS_results.cap_ion_disp(i, :)', 'Color', Int_colors(i, :), 'LineStyle', '--', 'LineWidth', 1);
-            plot(IS_results.Freq(i, :), IS_results.cap_cat_disp(i, :)', 'Color', Int_colors(i, :), 'LineStyle', '--', 'LineWidth', 1, 'Marker', '+');
-            plot(IS_results.Freq(i, :), IS_results.cap_ani_disp(i, :)', 'Color', Int_colors(i, :), 'LineStyle', '--', 'LineWidth', 1, 'Marker', 'x');
+            %plot(IS_results.Freq(i, :), IS_results.cap_ion_disp(i, :)', 'Color', Int_colors(i, :), 'LineStyle', '--', 'LineWidth', 1);
+            %plot(IS_results.Freq(i, :), IS_results.cap_cat_disp(i, :)', 'Color', Int_colors(i, :), 'LineStyle', '--', 'LineWidth', 1, 'Marker', '+');
+            %plot(IS_results.Freq(i, :), IS_results.cap_ani_disp(i, :)', 'Color', Int_colors(i, :), 'LineStyle', '--', 'LineWidth', 1, 'Marker', 'x');
             % capacitance calculated from the recombination amount
-            plot(IS_results.Freq(i, :), IS_results.cap_r(i, :)', 'Color', Int_colors(i, :), 'LineStyle', ':', 'LineWidth', 1.5);
+            %plot(IS_results.Freq(i, :), IS_results.cap_r(i, :)', 'Color', Int_colors(i, :), 'LineStyle', ':', 'LineWidth', 1.5);
         end
         if isfield(IS_results, 'cap_np_dt') % not present in ISstep simulation
-            plot(IS_results.Freq(i, :), IS_results.cap_np_dt(i, :)', 'Color', Int_colors(i, :), 'Marker', '+', 'MarkerSize', 9, 'LineStyle', '-.', 'LineWidth', 1);
+            %plot(IS_results.Freq(i, :), IS_results.cap_np_dt(i, :)', 'Color', Int_colors(i, :), 'Marker', '+', 'MarkerSize', 9, 'LineStyle', '-.', 'LineWidth', 1);
         end
+        
     end
     ax = gca;
     ax.XScale = 'log'; % for putting the scale in log
@@ -101,8 +109,8 @@ figure('Name', 'IS at light intensities. Dashed: ionic; dotted: recombination; d
     xlim(xlim_array)
     xlabel('Frequency [Hz]');
     ylabel('\omega^{-1} x Im(Z^{-1}) [F/cm^2]');
-    legend(flipud(h), legend_flip)
-    legend boxoff
+    
+    
 
 %% in case of IS do additional graphics
 if isfield(IS_results, 'Jtot_phase') % just IS have phase output

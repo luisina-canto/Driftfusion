@@ -9,7 +9,7 @@ t0 = 1e-9;              % Initial time after zero. The voltage steps at t = 0 an
 tmax = 10;              % End time to capture to
 tpoints = 800;         % Number of time points for the voltage step (log spacing)
 DeltaV_OC = 10e-3;      % Voltage step
-intsarr = [0, 1e-3, 1e-2, 1e-1, 1];       % Array of light intensities at which the solution will be calculated
+intsarr = [0.5];       % Array of light intensities at which the solution will be calculated
 
 %% Obtain open circuit solutions
 for i = 1:length(intsarr)
