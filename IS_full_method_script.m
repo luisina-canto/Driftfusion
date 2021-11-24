@@ -42,11 +42,18 @@ par = pc(input_csv);
 % EF0_arr = [-4.6, -4.7, -4.8];
 % Ncat_arr = [1e15, 1e16, 1e17, 1e18, 1e19];
 %EF0_arr = -4.7;
-Ncat_arr = [1e17,1e18,1e19];
+Ncat_arr = [1e14,1e15,1e16,1e17,1e18,1e19];
+
+% Calculating tghe mobility which varies with the reciprocal of ion
+% concentration to give a constant conductivity
+mu_carr = 1e19*1e-10./Ncat_arr;
+
 for i = 1:length(Ncat_arr)
     par_struct(i) = par;
     
+    par_struct(i).mu_c(3) = mu_carr(i);
     par_struct(i).Ncat = [Ncat_arr(i), Ncat_arr(i), Ncat_arr(i), Ncat_arr(i), Ncat_arr(i)];
+    
     
     %par_struct(i).EF0(1) = EF0_arr(i);
     %par_struct(i).Phi_left = EF0_arr(i);
@@ -65,13 +72,14 @@ for i = 1:length(Ncat_arr)
 end
 
 %% Scripts IS, helper and analysis
-startFreq = 1e6;
+
+startFreq = 1e7;  % Maybe change to 1e7?
 endFreq = 1e-2;
-Freq_points = 12;
+Freq_points = 4;
 deltaV = 2e-3;
 frozen_ions = false;
 demodulation = true;
-do_graphics = true;
+do_graphics = false;
 for i = 1:length(Ncat_arr)
     % IS_results = IS_script(structs, startFreq, endFreq, Freq_points, deltaV, frozen_ions, demodulation, do_graphics)
     sol_IS_SC(i) = IS_script(soleq(i).ion, startFreq, endFreq, Freq_points, deltaV, frozen_ions, demodulation, do_graphics);
@@ -86,13 +94,13 @@ for i = 1:length(Ncat_arr)
     %IS_script_exporter('unit_testing_deleteme', sol_IS_OC(i))
 
     % IS_script_plot_impedance(IS_results)
-    IS_script_plot_impedance(sol_IS_OC(i),i,Ncat_arr(i))
+    IS_script_plot_impedance_2(sol_IS_OC(i),i,Ncat_arr(i))
     
     % IS_script_plot_nyquist(IS_results)
-    %IS_script_plot_nyquist(sol_IS_OC(i))
+    IS_script_plot_nyquist_2(sol_IS_OC(i),i,Ncat_arr(i))
 
     % IS_script_plot_phase(IS_results)
-    %IS_script_plot_phase(sol_IS_OC(i))
+    IS_script_plot_phase_2(sol_IS_OC(i),i,Ncat_arr(i))
 end 
 %% Scripts IS non parallel and analysis
 
