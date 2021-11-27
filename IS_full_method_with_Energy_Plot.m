@@ -30,7 +30,6 @@ input_csv = 'Input_files/spiro_mapi_tio2.csv';
 % par = pc(varargin)
 par = pc(input_csv);
 
-
 % Other parameters to change:
 % HTL doping level: par.EF0(1)      % (eV)
 % For Ohmic contact- also change Phi_left fot same value
@@ -43,11 +42,16 @@ par = pc(input_csv);
 % EF0_arr = [-4.6, -4.7, -4.8];
 % Ncat_arr = [1e15, 1e16, 1e17, 1e18, 1e19];
 %EF0_arr = -4.7;
-Ncat_arr = [1e14,1e15,1e16];
+Ncat_arr = [1e16];
 
 % Calculating tghe mobility which varies with the reciprocal of ion
 % concentration to give a constant conductivity
 mu_carr = 1e19*1e-10./Ncat_arr;
+
+Vmax = 1.2;                     % Maximum voltage for cyclic voltammogram
+Vmin = -1.2;                    % Minimum voltage for cyclic voltammogram
+scan_rate = 1e-3; 
+
 
 for i = 1:length(Ncat_arr)
     par_struct(i) = par;
@@ -63,6 +67,8 @@ for i = 1:length(Ncat_arr)
     par_struct(i) = refresh_device(par_struct(i));
     % soleq = equilibrate(varargin)
     soleq(i) = equilibrate(par_struct(i));
+    sol_CV(i) = doCV(sol_eq.el(i), 0.5, 0, Vmax, Vmin, scan_rate, 1, 401);
+   
 end
 
 for i = 1:length(Ncat_arr)

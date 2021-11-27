@@ -127,7 +127,7 @@ np_dt_phase = tmax_matrix;
 disp([mfilename ' - Doing the IS']);
 for i = 1:length(structs(1, :))
     s = structs{1, i};
-    Int_array(i) = s.par.int1;
+    Int_array(i) = s.par.int1; 
     % ensuring stability of starting solution
     s = stabilize(s);
     % calculate currently applied DC voltage, as defined in pinana
