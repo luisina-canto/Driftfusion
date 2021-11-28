@@ -24,7 +24,7 @@ J = Jstruct.tot(:,1);                   % Total current at left-hand boundary
 %% Plot energy level diagram at applied bias Vapp for first light intensity
 Vplot = 0;
 % Get corresponding time, TPLOT for VPLOT']
-
+    
 if Vplot >= 0
     tplot = Vplot/scan_rate;
 elseif Vplot < 0
@@ -33,4 +33,4 @@ end
 % PLot the energy level diagram at time TPLOT
 dfplot.ELx(sol_CV, tplot);
 % PLot the carrier densities at time TPLOT
-dfplot.npx(sol_CV, tplot);
+%dfplot.npx(sol_CV, tplot);
