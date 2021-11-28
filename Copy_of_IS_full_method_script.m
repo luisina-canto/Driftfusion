@@ -80,13 +80,22 @@ deltaV = 2e-3;
 frozen_ions = false;
 demodulation = true;
 do_graphics = false;
+
+light_intensity = 0.5;            % Suns equivalent
+Vmax = 1.2;                     % Maximum voltage for cyclic voltammogram
+Vmin = -1.2;                    % Minimum voltage for cyclic voltammogram
+scan_rate = 1e-3; 
+
 for i = 1:length(Ncat_arr)
     % IS_results = IS_script(structs, startFreq, endFreq, Freq_points, deltaV, frozen_ions, demodulation, do_graphics)
     sol_IS_SC(i) = IS_script(soleq(i).ion, startFreq, endFreq, Freq_points, deltaV, frozen_ions, demodulation, do_graphics);
     
     % IS_results = IS_script(structs, startFreq, endFreq, Freq_points, deltaV, frozen_ions, demodulation, do_graphics)
     sol_IS_OC(i) = IS_script(sol_OC(i), startFreq, endFreq, Freq_points, deltaV, frozen_ions, demodulation, do_graphics);
+
+    sol_CV(i) = doCV(soleq(i).el, light_intensity, 0, Vmax, Vmin, scan_rate, 1, 401);
 end
+
 
 %% Analysis plots
 % IS_script_exporter(prefix, IS_results)
@@ -94,14 +103,17 @@ for i = 1:length(Ncat_arr)
     %IS_script_exporter('unit_testing_deleteme', sol_IS_OC(i))
 
     % IS_script_plot_impedance(IS_results)
-    IS_script_plot_impedance_2(sol_IS_OC(i),i,Ncat_arr(i))
+   % IS_script_plot_impedance_2(sol_IS_OC(i),i,Ncat_arr(i))
     
     % IS_script_plot_nyquist(IS_results)
-    IS_script_plot_nyquist_2(sol_IS_OC(i),i,Ncat_arr(i))
+    %IS_script_plot_nyquist_2(sol_IS_OC(i),i,Ncat_arr(i))
 
     % IS_script_plot_phase(IS_results)
-    IS_script_plot_phase_2(sol_IS_OC(i),i,Ncat_arr(i))
+    %IS_script_plot_phase_2(sol_IS_OC(i),i,Ncat_arr(i))
+
+    dfplot.ELx(sol_CV(i), tplot);
 end 
+
 %% Scripts IS non parallel and analysis
 
 % % IS_results = IS_script_nonparallel(structs, startFreq, endFreq, Freq_points, deltaV, sequential, frozen_ions, demodulation, do_graphics, save_solutions)
