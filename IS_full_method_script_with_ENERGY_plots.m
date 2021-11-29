@@ -71,7 +71,7 @@ end
 
 startFreq = 1e7;  % Maybe change to 1e7?
 endFreq = 1e-2;
-Freq_points = 4;
+Freq_points = 24;
 deltaV = 2e-3;
 frozen_ions = false;
 demodulation = true;
@@ -90,7 +90,7 @@ end
 
 %% Plot energy level diagram at applied bias Vapp for first light intensity
 Vplot = 0;
-% Get corresponding time, TPLOT for VPLOT']
+% Get corresponding time, TPLOT for VPLOT
     
 if Vplot >= 0
     tplot = Vplot/scan_rate;
