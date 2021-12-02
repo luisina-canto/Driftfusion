@@ -625,20 +625,19 @@ classdef df2plot
             dfplot.x2d(sol, x, {-V},{'V'},{'-'},'-Electrostatic potential [V]', tarr, xrange, 0, 0);
         end
 
-        function ELx(varargin)
+        function ELx(loop_index,varargin)
             % Energy Level diagram, and charge densities plotter
             % SOL = the solution structure
             % TARR = An array containing the times that you wish to plot
             % XRANGE = 2 element array with [xmin, xmax]
-            [sol, tarr, plots, pointtype, xrange] = df2plot.sortarg(varargin);
+           [sol, tarr, pointtype, xrange] = dfplot.sortarg(varargin);
             [u,t,x,par,dev,n,p,a,c,V] = dfana.splitsol(sol);
             [Ecb, Evb, Efn, Efp] = dfana.calcEnergies(sol);
 
-            for i = 1:plots
-                figure(i);
-                dfplot.x2d(sol, x, {Efn, Efp, Ecb, Evb}, {'E_{fn}', 'E_{fp}', 'E_{CB}', 'E_{VB}'},...
-                    {'--', '--', '-', '-'}, 'Energy [eV]', tarr, xrange, 0, 0)
-            end
+            figure(loop_index);
+            dfplot.x2d(sol, x, {Efn, Efp, Ecb, Evb}, {'E_{fn}', 'E_{fp}', 'E_{CB}', 'E_{VB}'},...
+                {'--', '--', '-', '-'}, 'Energy [eV]', tarr, xrange, 0, 0)
+       
         end     
         
         function ELx_uncontacted(varargin)
@@ -806,13 +805,13 @@ classdef df2plot
             elseif length(args) == 3
                 sol = args{1};
                 tarr = args{2};
-                plots = args{3}
+                plots = args{3};
                 xrange = [sol.x(1), sol.x(end)]*1e7;    %
                 pointtype = 't';
             elseif length(args) == 4
                 sol = args{1};
                 tarr = args{2};
-                plots = args{3}
+                plots = args{3};
                 xrange = args{4};
                 pointtype = 't';    
                 
