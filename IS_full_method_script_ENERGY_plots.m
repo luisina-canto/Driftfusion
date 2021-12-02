@@ -42,7 +42,7 @@ par = pc(input_csv);
 % EF0_arr = [-4.6, -4.7, -4.8];
 % Ncat_arr = [1e15, 1e16, 1e17, 1e18, 1e19];
 %EF0_arr = -4.7;
-Ncat_arr = [1e15,1e16,1e17,1e18];
+Ncat_arr = [1e18,1e19];
 
 % Calculating tghe mobility which varies with the reciprocal of ion
 % concentration to give a constant conductivity
@@ -62,8 +62,13 @@ for i = 1:length(Ncat_arr)
     par_struct(i) = refresh_device(par_struct(i));
     % soleq = equilibrate(varargin)
     soleq(i) = equilibrate(par_struct(i));
-   
+end
 
+for i = 1:length(Ncat_arr)
+    %% Obtain open circuit initial condition
+    % sol_ill = lightonRs(sol_ini, int1, stable_time, mobseti, Rs, pnts)
+    sol_Rs1e6(i) = lightonRs(soleq(i).ion, 0.5, -100, 1, 1e6, 100);
+    sol_OC(i) = RsToClosedCircuit(sol_Rs1e6(i));
 end
 
 
@@ -71,42 +76,22 @@ end
 
 startFreq = 1e7;  % Maybe change to 1e7?
 endFreq = 1e-2;
-Freq_points = 24;
+Freq_points = 4;
 deltaV = 2e-3;
 frozen_ions = false;
 demodulation = true;
 do_graphics = false;
 
-light_intensity = 0.5;            % Suns equivalent
-Vmax = 1.2;                     % Maximum voltage for cyclic voltammogram
-Vmin = -1.2;                    % Minimum voltage for cyclic voltammogram
-scan_rate = 1e-3; 
 
-for i = 1:length(Ncat_arr)
-    
-    sol_CV(i) = doCV(soleq(i).ion, light_intensity, 0, Vmax, Vmin, scan_rate, 1, 401);
 
-end
-
-%% Plot energy level diagram at applied bias Vapp for first light intensity
-Vplot = 0;
-% Get corresponding time, TPLOT for VPLOT
-    
-if Vplot >= 0
-    tplot = Vplot/scan_rate;
-elseif Vplot < 0
-    tplot = ((2*Vmax)+abs(Vplot))/scan_rate; 
-end
 
 %% instead of dfplot.ELx(varargin)
 
 for i = 1:length(Ncat_arr)
-                df2plot.ELx(sol_CV(i), tplot, length(Ncat_arr));
-<<<<<<< Updated upstream:IS_full_method_script_with_ENERGY_plots.m
-=======
+
+                df2plot.ELx(i, sol_OC(i));
                 title('Energy Diagram for Ncat=', Ncat_arr(i))
 
->>>>>>> Stashed changes:IS_full_method_script_ENERGY_plots.m
 end
 
 
