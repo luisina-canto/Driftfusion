@@ -1,4 +1,4 @@
-function IS_script_plot_impedance_2(IS_results,loop,change)
+function IS_script_plot_impedance_2(IS_results,loop,change,leng)
 %IS_SCRIPT_PLOT_IMPEDANCE - Represents Bode plots of impedance and capacitance from impedance spectroscopy
 % Plot the value of absolute impedance magnitude |Z|, resistance Z'
 % (real component), reactance Z'' (imaginary component), and apparent
@@ -72,10 +72,15 @@ xlim_array = [min(min(IS_results.Freq))*0.99, max(max(IS_results.Freq)*1.01)];
 %% plot apparent capacitance vs frequency
 
 
-leg = join(["Ncat =", string(change)]);
-col = (floor(length(Int_colors)/6))*loop;
+if length(change)>1
+    leg = join(["EA = ", string(change(1)),"eV ", "/ IP = ", string(change(2)), "eV"],'');
+else
+    leg = join([string(change)],'');
+end
 
-figure('Name', 'IS at light intensities. Dashed: ionic; dotted: recombination; dashdotted: stored charge variation', 'NumberTitle', 'on');
+col = (floor(length(Int_colors)/leng))*loop;
+
+%figure('Name', 'IS at light intensities. Dashed: ionic; dotted: recombination; dashdotted: stored charge variation', 'NumberTitle', 'on');
     hold on
     for i = 1:length(legend_text)
         legend_flip;
@@ -85,7 +90,8 @@ figure('Name', 'IS at light intensities. Dashed: ionic; dotted: recombination; d
             'Color', Int_colors(col,:), 'MarkerEdgeColor', Int_colors(col, :),...
             'MarkerFaceColor', Int_colors(col, :), 'Marker', 's',...
             'MarkerSize', 3, 'LineWidth', 1.3,'DisplayName',leg);
-        legend;
+        lgd = legend;
+        lgd.Title.String = 'Active Layer Thickness';
         hold on
         % for plotting the negative capacitance
 %         plot(IS_results.Freq(i, :), -IS_results.cap(i, :)',...
@@ -111,13 +117,14 @@ figure('Name', 'IS at light intensities. Dashed: ionic; dotted: recombination; d
     xlim(xlim_array)
     xlabel('Frequency [Hz]');
     ylabel('\omega^{-1} x Im(Z^{-1}) [F/cm^2]');
+    title('Apparent Capacitance Plot');
     legend boxoff
     
 
 %% in case of IS do additional graphics
 if isfield(IS_results, 'Jtot_phase') % just IS have phase output
     
-    figure('Name', 'imaginary impedance at light intensities. Dashed: ionic; dotted: recombination; dashdotted: stored charge variation', 'NumberTitle', 'on');
+    %figure('Name', 'imaginary impedance at light intensities. Dashed: ionic; dotted: recombination; dashdotted: stored charge variation', 'NumberTitle', 'on');
 
         hold on
         for i = 1:length(legend_text)
@@ -126,7 +133,8 @@ if isfield(IS_results, 'Jtot_phase') % just IS have phase output
                 'Color', Int_colors(col, :), 'MarkerEdgeColor', Int_colors(col, :),...
                 'MarkerFaceColor', Int_colors(col, :), 'Marker', 's',...
                 'MarkerSize', 3, 'LineWidth', 1.3,'DisplayName',leg);
-            legend;
+            lgd = legend;
+            lgd.Title.String = 'Active Layer Thickness';
             hold on
 %             plot(IS_results.Freq(i, :), -IS_results.impedance_ion_disp_im(i, :)', 'Color', Int_colors(i, :), 'LineStyle', '--', 'LineWidth', 1);
 %             plot(IS_results.Freq(i, :), -IS_results.impedance_cat_disp_im(i, :)', 'Color', Int_colors(i, :), 'LineStyle', '--', 'LineWidth', 1, 'Marker', '+');
@@ -139,11 +147,12 @@ if isfield(IS_results, 'Jtot_phase') % just IS have phase output
         ax.YScale = 'log'; % for putting the scale in log
         xlim(xlim_array)
         xlabel('Frequency [Hz]');
+        title('Imaginary Component of Impedance vs Frequency');
         ylabel('-Im(Z) [\Omega cm^2]');
         legend boxoff
     
     
-    figure('Name', 'real impedance at light intensities. Dashed: ionic; dotted: recombination; dashdotted: stored charge variation', 'NumberTitle', 'on');   
+    %figure('Name', 'real impedance at light intensities. Dashed: ionic; dotted: recombination; dashdotted: stored charge variation', 'NumberTitle', 'on');   
         hold on
         for i = 1:length(legend_text)
             figure(4)
@@ -151,7 +160,8 @@ if isfield(IS_results, 'Jtot_phase') % just IS have phase output
                 'Color', Int_colors(col, :), 'MarkerEdgeColor', Int_colors(col, :),...
                 'MarkerFaceColor', Int_colors(col, :), 'Marker', 's',...
                 'MarkerSize', 3, 'LineWidth', 1.3,'DisplayName',leg);
-            legend;
+            lgd = legend;
+            lgd.Title.String = 'Active Layer Thickness';
             hold on
 %             plot(IS_results.Freq(i, :), IS_results.impedance_ion_disp_re(i, :)', 'Color', Int_colors(i, :), 'LineStyle', '--', 'LineWidth', 1);
 %             plot(IS_results.Freq(i, :), IS_results.impedance_cat_disp_re(i, :)', 'Color', Int_colors(i, :), 'LineStyle', '--', 'LineWidth', 1, 'Marker', '+');
@@ -165,10 +175,11 @@ if isfield(IS_results, 'Jtot_phase') % just IS have phase output
         xlim(xlim_array)
         xlabel('Frequency [Hz]');
         ylabel('Re(Z) [\Omega cm^2]');
+        title('Real Component of Impedance vs Frequency');
         legend boxoff
     
     
-    figure('Name', 'abs impedance at light intensities. Dashed: ionic; dotted: recombination; dashdotted: stored charge variation', 'NumberTitle', 'on'); 
+    %figure('Name', 'abs impedance at light intensities. Dashed: ionic; dotted: recombination; dashdotted: stored charge variation', 'NumberTitle', 'on'); 
         hold on
         for i = 1:length(legend_text)
             figure(5)
@@ -190,6 +201,7 @@ if isfield(IS_results, 'Jtot_phase') % just IS have phase output
         xlim(xlim_array)
         xlabel('Frequency [Hz]');
         ylabel('Abs(Z) [\Omega cm^2]');
+        title('Absolute value of Impedance vs Frequency');
 
         legend boxoff
 end

@@ -1,4 +1,4 @@
-function IS_script_plot_phase_2(IS_results,loop,change)
+function IS_script_plot_phase_2(IS_results,loop,change,leng)
 %IS_SCRIPT_PLOT_PHASE - Represents Bode plots of phase from impedance spectroscopy
 % The phase of the current oscillation with regards to the applied voltage
 % is plotted as obtained from simulations made with
@@ -72,10 +72,15 @@ phase_i_deg = rad2deg(IS_results.ion_disp_phase);
 phase_U_deg = rad2deg(IS_results.r_phase);
 phase_dQ_deg = rad2deg(IS_results.np_dt_phase);
 
-leg = join(["Ncat =", string(change)]);
-col = (floor(length(Int_colors)/6))*loop;
+if length(change)>1
+    leg = join(["EA = ", string(change(1)),"eV ", "/ IP = ", string(change(2)), "eV"],'');
+else
+    leg = join([string(change)],'');
+end
 
-figure('Name', 'Phase plot of IS. Dashed: ionic; dotted: recombination; dashdotted: stored charge variation', 'NumberTitle', 'on')
+col = (floor(length(Int_colors)/leng))*loop;
+
+%figure('Name', 'Phase plot of IS. Dashed: ionic; dotted: recombination; dashdotted: stored charge variation', 'NumberTitle', 'on')
     hold on
     for i = 1:length(legend_text)
         figure(7);
@@ -83,7 +88,8 @@ figure('Name', 'Phase plot of IS. Dashed: ionic; dotted: recombination; dashdott
             'Color', Int_colors(col, :), 'MarkerEdgeColor', Int_colors(col, :),...
             'MarkerFaceColor', Int_colors(col, :), 'Marker', 's',...
             'MarkerSize', 3, 'LineWidth', 1.3,'DisplayName',leg);
-        legend;
+        lgd = legend;
+        lgd.Title.String = 'Active Layer Thickness';
         hold on
         % plot ionic displacement current phase
 %         plot(IS_results.Freq(i, :), -phase_i_deg(i, :)', 'Color', Int_colors(i, :), 'LineStyle', '--', 'LineWidth', 1);
@@ -95,6 +101,7 @@ figure('Name', 'Phase plot of IS. Dashed: ionic; dotted: recombination; dashdott
     ax = gca;
     ax.XScale = 'log'; % for putting the scale in log
     xlim(xlim_array)
+    title('Impedance Phase Plot')
     xlabel('Frequency [Hz]');
     ylabel('Z Phase [deg]');
     legend boxoff

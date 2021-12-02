@@ -1,4 +1,4 @@
-function IS_script_plot_nyquist_2(IS_results, loop, change)
+function IS_script_plot_nyquist_2(IS_results, loop, change,leng)
 %IS_SCRIPT_PLOT_NYQUIST - Plot Nyquist graph for Impedance Spectroscopy (IS)
 % in a range of background light intensities or applied DC voltages, imaginary part of impedance versus real part of impedance
 % Nyquist plot refers the imaginary component of the impedance to its real component.
@@ -61,10 +61,15 @@ legend_flip(legend_flip=="0 sun") = "dark";
 % preallocate figures handles
 h = zeros(length(legend_text), 1);
 
-leg = join(["Ncat =", string(change)]);
-col = (floor(length(Int_colors)/6))*loop;
+if length(change)>1
+    leg = join(["EA = ", string(change(1)),"eV ", "/ IP = ", string(change(2)), "eV"],'');
+else
+    leg = join([string(change)],'');
+end
 
-figure('Name', 'Nyquist plot of IS at various light intensities', 'NumberTitle', 'on')
+col = (floor(length(Int_colors)/leng))*loop;
+
+%figure('Name', 'Nyquist plot of IS at various light intensities', 'NumberTitle', 'on')
     hold on
     for i = 1:length(legend_text)
         figure(6)
@@ -77,7 +82,8 @@ figure('Name', 'Nyquist plot of IS at various light intensities', 'NumberTitle',
             'MarkerFaceColor', Int_colors(col, :), 'Marker', 's',...
             'MarkerSize', 3, 'LineWidth', 1.3,'DisplayName',leg);
         hold on
-        legend;
+        lgd = legend;
+        lgd.Title.String = 'Active Layer Thickness';
         % add bigger markers for the points of the even decades
 %         plot(IS_results.impedance_re(i, evendecade_index), -IS_results.impedance_im(i, evendecade_index)',...
 %             'MarkerFaceColor', Int_colors(i, :), 'MarkerEdgeColor', Int_colors(i, :),...
@@ -86,7 +92,8 @@ figure('Name', 'Nyquist plot of IS at various light intensities', 'NumberTitle',
     xlabel('Re(Z) [\Omega cm^2]');
     ylabel('-Im(Z) [\Omega cm^2]');
     legend boxoff
-
+    title('Nyquist Plot')
+    
 % preallocate figures handles
 h = zeros(length(legend_text), 1);
 % % normalized Nyquist plot
