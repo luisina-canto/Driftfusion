@@ -52,10 +52,13 @@ mu_a_arr = 1e19*1e-10./Nani_arr;
 for i = 1:length(Nani_arr)
     par_struct(i) = par;
     
-    %par_struct(i).mu_a(3) = mu_a_arr(i);
-    par_struct(i).mu_c(3) = 0;
-    par_struct(i).Nani = [Nani_arr(i), Nani_arr(i), Nani_arr(i), Nani_arr(i), Nani_arr(i)];
+    par_struct(i).mu_a(3) = mu_a_arr(i);
     
+    % Below should make cation mobility zero but this makes an error for an
+    % unknown reason?
+    %par_struct(i).mu_c(3) = 0;
+    
+    par_struct(i).Nani = [Nani_arr(i), Nani_arr(i), Nani_arr(i), Nani_arr(i), Nani_arr(i)];
     
     % Everytime you change your parameters in a script use this function:
     par_struct(i) = refresh_device(par_struct(i));
