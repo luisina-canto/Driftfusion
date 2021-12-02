@@ -46,10 +46,6 @@ IP_arr = [-5.0,-5.05,-5.1,-5.15,-5.2];
 %-2.9,-2.95,-3,-3.05,-3.1
 %-5.0,-5.05,-5.1,-5.15,-5.2
 
-% Ncat_arr = [1e15, 1e16, 1e17, 1e18, 1e19];
-%EF0_arr = -4.7;
-Nani_arr = [1e16,1e17];
-
 % Calculating tghe mobility which varies with the reciprocal of ion
 % concentration to give a constant conductivity
 %mu_carr = 1e19*1e-10./Ncat_arr;
@@ -57,12 +53,11 @@ Nani_arr = [1e16,1e17];
 for i = 1:length(EF0_arr)
     par_struct(i) = par;
     
+    % Might want to edit mobility of ions:
     %par_struct(i).mu_c(3) = mu_carr(i);
-    %par_struct(i).Ncat = [Nani_arr(i), Nani_arr(i), Nani_arr(i), Nani_arr(i), Nani_arr(i)];
     
     par_struct(i).Phi_IP(1) = IP_arr(i);
     par_struct(i).Phi_EA(1) = EA_arr(i);
-    %par_struct(i).Phi_left = EF0_arr(i);
     
     % Everytime you change your parameters in a script use this function:
     par_struct(i) = refresh_device(par_struct(i));
