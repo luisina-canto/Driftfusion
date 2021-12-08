@@ -316,13 +316,16 @@ classdef df2plot
             ylabel('Position [cm]')
         end
 
-        function Vx(varargin)
+        function Vx(loop_index,variable, varargin)
             % Electrostatic potential as a function of position
             [sol, tarr, pointtype, xrange] = dfplot.sortarg(varargin);
             [u,t,x,par,dev,n,p,a,c,V] = dfana.splitsol(sol);
 
-            figure(12);
-            dfplot.x2d(sol, x, {V},{'V'},{'-'},'Electrostatic potential [V]', tarr, xrange, 0, 0);
+            figure(loop_index);
+            hold on
+            df2plot.x2d(variable,sol, x, {V},{'V'},{'-'},'Electrostatic potential [V]', tarr, xrange, 0, 0);
+            hold on
+            
         end
 
         function Fx(varargin)
@@ -819,7 +822,8 @@ classdef df2plot
             end
         end
 
-        function x2d(sol, xmesh, variables, legstr, linestyle, ylab, tarr, xrange, logx, logy)
+        function x2d(variable,sol, xmesh, variables, legstr, linestyle, ylab, tarr, xrange, logx, logy)
+            % variable= variable we are changing to label the legend
             % SOL = solution structure
             % VARIABLES is an array containing the variables for plotting
             % LEGSTR is the legend string
@@ -848,6 +852,7 @@ classdef df2plot
                         dfplot.colourblocks(sol, [vmin-(vrange*0.2), vmax+(vrange*0.2)]);
                     case 1
                         dfplot.colourblocks(sol, [0.1*vmin, 10*vmax]);
+                      
                 end
             end
 
@@ -855,10 +860,12 @@ classdef df2plot
             vmax_tarr = zeros(length(tarr),length(variables));
             h = zeros(1, length(variables));
 
+            hold on
             for i = 1:length(tarr)
                 % find the time
                 p1 = find(sol.t <= tarr(i));
                 p1 = p1(end);
+                hold on
                 for jj = 1:length(variables)
                     vtemp = variables{jj};
 
@@ -866,8 +873,9 @@ classdef df2plot
                     vmax_tarr(i,jj) = max(vtemp(p1, :));
 
                     h(i,jj) = plot(xnm, variables{jj}(p1, :), char(linestyle(jj)));
-                    hold on
+                hold on
                 end
+                hold on
             end
             xlabel('Position [nm]')
             ylabel(ylab)
@@ -876,16 +884,19 @@ classdef df2plot
             end
             if logx == 1
                 set(gca, 'XScale','log');
+
             end
             if length(variables) == 1
                 mystr = [];
-                for i = 1:length(tarr)
-                    mystr = [mystr, string(['t = ', num2str(tarr(i)), ' s'])];
+                for i = 1:length(variable)
+                    mystr = [mystr, string(['Ncat = ', num2str(variable)])];
+                   % [mystr, string([num2str('Ncat=', variable)])]; % edited this to change legend to variable
                 end
                 lgd = legend(h, mystr);
             else
                 lgd = legend(h(1,:), legstr);
             end
+            hold on
             lgd.FontSize = 12;
             xlim([xrange(1), xrange(2)])
             ymin = min(min(vmin_tarr));
@@ -906,7 +917,7 @@ classdef df2plot
             end
             set(gca, 'Layer', 'top')
             box on
-            hold off
+            hold on %change back to hold off?
         end
     end
 end
