@@ -1,7 +1,17 @@
-function struct = Current_Contributions(sol)
-%Script to plot the currents from radiative and non-radiative (split into SRH
-%and VSR) losses, alongside the current measured in a JV sweep and the
-%generation current. 
+function struct = current_contributions(sol)
+% Script to plot the currents from radiative and non-radiative (split into SRH
+% and VSR) losses, alongside the current measured in a JV sweep and the
+% generation current.
+% STRUCT is a structure containing the different current outputs as a
+% function of time:
+% J_GEN = Generation current
+% J_BTB = Band-to-band (radiative) recombination current
+% J_SRH_BULK = Shockley-Read-Hall bulk recombiantion current
+% J_VSR = Shockley-Read-Hal internal interfaces recombination currents. The
+% row number defines the interface numbered from left to right
+% J_SURF_L = Left-hand boundary SRH surface recombination current
+% J_SURF_R = Right-hand boundary SRH surface recombination current
+% J_TOT = Total current
 
 par = sol.par;
 t = sol.t;
