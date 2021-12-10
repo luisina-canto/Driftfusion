@@ -1,8 +1,8 @@
-function struct = current_contributions(sol)
+function Jcomp = current_contributions(sol, figson)
 % Script to plot the currents from radiative and non-radiative (split into SRH
 % and VSR) losses, alongside the current measured in a JV sweep and the
 % generation current.
-% STRUCT is a structure containing the different current outputs as a
+% JCOMP is a structure containing the different current outputs as a
 % function of time:
 % J_GEN = Generation current
 % J_BTB = Band-to-band (radiative) recombination current
@@ -51,31 +51,33 @@ J_srh_bulk = e*trapz(x, loss_currents.srh, 2)';
 J_surf_l = e*(j_surf_rec.l)';
 J_surf_r = e*(j_surf_rec.r)';
 J_tot = J.tot(:,1)';
-    
-%% Plot contributons to the current
-figure(300)
-plot(V, J_gen, V, J_btb, V, J_srh_bulk, V, J_surf_l, V, J_surf_r)
-hold on
-for i = 1:length(loc)
-    plot(V, J_vsr(i, :))
-end
-plot(V, J_tot)
-
-plot(V(1:num_values), zeros(1,num_values), 'black', 'LineWidth', 1)
-hold off
-xlim([0, sol.par.V_fun_arg(2)])
-xlabel('Voltage (V)')
-ylim([-0.025, 0.025])
-ylabel('Current Density (Acm^{-2})')
-legend({'J_{gen}', 'J_{rad}', 'J_{SRH, bulk}', 'J_{surf, l}', 'J_{surf, r}', 'J_{interface 1}', 'J_{interface 2}', 'J_{ext}'}, 'Location', 'bestoutside')
 
 % Package into output structure
-struct.J_gen = J_gen;
-struct.J_btb = J_btb;
-struct.J_srh_bulk = J_srh_bulk;
-struct.J_surf_l = J_surf_l;
-struct.J_surf_r = J_surf_r;
-struct.J_vsr = J_vsr;
-struct.J_tot = J_tot;
+Jcomp.J_gen = J_gen;
+Jcomp.J_btb = J_btb;
+Jcomp.J_srh_bulk = J_srh_bulk;
+Jcomp.J_surf_l = J_surf_l;
+Jcomp.J_surf_r = J_surf_r;
+Jcomp.J_vsr = J_vsr;
+Jcomp .J_tot = J_tot;
+
+if figson
+    %% Plot contributons to the current
+    figure(300)
+    plot(V, J_gen, V, J_btb, V, J_srh_bulk, V, J_surf_l, V, J_surf_r)
+    hold on
+    for i = 1:length(loc)
+        plot(V, J_vsr(i, :))
+    end
+    plot(V, J_tot)
+    
+    plot(V(1:num_values), zeros(1,num_values), 'black', 'LineWidth', 1)
+    hold off
+    xlim([0, sol.par.V_fun_arg(2)])
+    xlabel('Voltage (V)')
+    ylim([-0.025, 0.025])
+    ylabel('Current Density (Acm^{-2})')
+    legend({'J_{gen}', 'J_{rad}', 'J_{SRH, bulk}', 'J_{surf, l}', 'J_{surf, r}', 'J_{interface 1}', 'J_{interface 2}', 'J_{ext}'}, 'Location', 'bestoutside')
+end
 
 end

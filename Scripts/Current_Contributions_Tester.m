@@ -3,5 +3,6 @@ eqm = equilibrate(par);
 CV_solution = doCV(eqm.ion, 1, 0, 1.1, 0, 10e-3, 1, 211);
 
 %% Plots
-Jcomp = current_contributions(CV_solution);
+figson = 1;
+Jcomp = current_contributions(CV_solution, figson);
 stats = CVstats(CV_solution);
