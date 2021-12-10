@@ -45,7 +45,7 @@ for i = 1:length(loc)
     J_vsr(i,:) = e*trapz(x(p_L:p_R), loss_currents.vsr(:, p_L:p_R), 2)';
 end
 %forward sweep
-J_gen = -e*trapz(x, gxt(1,:))';
+J_gen = -e*trapz(x, gxt, 2)';
 J_btb = e*trapz(x, loss_currents.btb, 2)';
 J_srh_bulk = e*trapz(x, loss_currents.srh, 2)';
 J_surf_l = e*(j_surf_rec.l)';
@@ -64,12 +64,12 @@ Jcomp .J_tot = J_tot;
 if figson
     %% Plot contributons to the current
     figure(300)
-    plot(V, J_gen, V, J_btb, V, J_srh_bulk, V, J_surf_l, V, J_surf_r)
+    plot(V, J_gen, '--', V, J_btb, V, J_srh_bulk, V, J_surf_l, V, J_surf_r)
     hold on
     for i = 1:length(loc)
         plot(V, J_vsr(i, :))
     end
-    plot(V, J_tot)
+    plot(V, J_tot, 'k')
     
     plot(V(1:num_values), zeros(1,num_values), 'black', 'LineWidth', 1)
     hold off
