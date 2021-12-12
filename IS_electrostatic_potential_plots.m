@@ -23,7 +23,7 @@ par = pc(input_csv);
 % EF0_arr = [-4.6, -4.7, -4.8];
 % Ncat_arr = [1e15, 1e16, 1e17, 1e18, 1e19];
 %EF0_arr = -4.7;
-Ncat_arr = [1e15];
+Ncat_arr = [1e14,1e15, 1e16, 1e17, 1e18, 1e19];
 
 %% indentify which parameter we want to vary 
 
