@@ -24,20 +24,25 @@ par = pc(input_csv);
 % Ncat_arr = [1e15, 1e16, 1e17, 1e18, 1e19];
 %EF0_arr = -4.7;
 Ncat_arr = [1e14,1e15, 1e16, 1e17, 1e18, 1e19];
+<<<<<<< Updated upstream
+=======
+
+var=Ncat_arr
+>>>>>>> Stashed changes
 
 %% indentify which parameter we want to vary 
 
 % Calculating the mobility which varies with the reciprocal of ion
 % concentration to give a constant conductivity
-mu_carr = 1e19*1e-10./Ncat_arr;
+mu_carr = 1e19*1e-10./var;
 
 
 
-for i = 1:length(Ncat_arr)
+for i = 1:length(var)
     par_struct(i) = par;
     
     par_struct(i).mu_c(3) = mu_carr(i);
-    par_struct(i).Ncat = [Ncat_arr(i), Ncat_arr(i), Ncat_arr(i), Ncat_arr(i), Ncat_arr(i)];
+    par_struct(i).Ncat = [var(i), var(i), var(i), var(i), var(i)];
     
     %par_struct(i).EF0(1) = EF0_arr(i);
     %par_struct(i).Phi_left = EF0_arr(i);
@@ -49,25 +54,27 @@ for i = 1:length(Ncat_arr)
 end
 
 
-for i = 1:length(Ncat_arr)
+for i = 1:length(var)
     %% Obtain open circuit initial condition
     % sol_ill = lightonRs(sol_ini, int1, stable_time, mobseti, Rs, pnts)
     sol_Rs1e6(i) = lightonRs(soleq(i).ion, 0.5, -100, 1, 1e6, 100);
     sol_OC(i) = RsToClosedCircuit(sol_Rs1e6(i));
 end
 
-%% plotting solutions
+%% plotting VX
 
-for i = 1:length(Ncat_arr)
+for i = 1:length(var)
                 
-                df2plot.Vx(i,Ncat_arr(i),sol_OC(i));
-                
-                
-                %title('Electrostatic potential for Ncat=', Ncat_arr(i))
-                %leg=join(['Ncat=',string(Ncat_arr(i))]);
-                %legend(leg);
+                df2plot.Vx(length(var),i,var(i),sol_OC(i));
+               
 end
+%% plot recombination rates
 
+for i = 1:length(var)
+                
+                df2plot.rx(length(var),i,var(i),sol_OC(i));
+               
+end
 
 
 %% analyse each zone
@@ -99,8 +106,8 @@ for i = 1:length(Ncat_arr)
 
     %want the potentials at the boundaries
     %need to find the nearest x values to :
-    x1=2e-7;
-    x2=6e-7;
+    x1=2e-5;
+    x2=6e-5;
 
     findx1=[];
     findx2=[];
@@ -122,6 +129,7 @@ for i = 1:length(Ncat_arr)
     [M,I]=min(findx1);
     index_x1=I;
 
+
     [M,I]=min(findx2);
     index_x2=I;
 
@@ -131,74 +139,40 @@ for i = 1:length(Ncat_arr)
     V_boundary2(i)=V(100,index_x2);
 
 
-    %prints out the x positions chosen (?)
-    %'x1=', x(index_x1) 
-    %'x2=', x(index_x2) 
+% 
+     figure (10+i)
+     plot(x(1:740),dif)
+%   
+% 
+%     x_index0=[];
+%     x_index01=[];
+%     
+%     for n=1:length(dif)
+%         grad=dif(n);
+% 
+% %         if grad>0
+% %             x_index0(n)=n;
+% %             x_position0(n)=x(n);
+% %             
+% %         elseif 
+% %             x(n)
+% 
+%    
+%          if n<=380 %finding the first drop of potential width
+%              if grad>0
+%                 x_index0(n)=n;
+%           
+%              end
 
-    %Vmin=V(100,39);
-
-
-
-    %for points in which there is no clear straight line, we find the 
-    % inflextion point which is when the second differential= 0 
-    curv=inflection(x,V);
-    second_dif=curv;
-   %figure(3)
-   %plot(x(2:end-1),curv);
-    [M,I]=min(abs(second_dif));
-
-    curv_pos=I;
-    inf_pos(i)=curv_pos;
-
-    %now need to calculate the 1st differential to find the space charge
-    %widths
-
-    %use function differentiate
-
-    
-    %need to find region where dV/dx NOT=0
-    %and need to determine the width of this region
-    %we can seperate this into the width for first section and second
-
-
-
-    dif=differential(x,V); %gives dV/dx
-
-    figure (10+i)
-    plot(x(1:740),dif)
-  
-
-    x_index0=[];
-    x_index01=[];
-    
-    for n=1:length(dif)
-        grad=dif(n);
-
-%         if grad>0
-%             x_index0(n)=n;
-%             x_position0(n)=x(n);
-%             
-%         elseif 
-%             x(n)
-
-   
-         if n<=380 %finding the first drop of potential width
-             if grad>0
-                x_index0(n)=n;
-          
-             end
-
-         elseif n>380
-             if grad<=-2.5 %second drop of potential
-                x_index01(n)=n;
-               
- 
-            end                 
-        end
+%          elseif n>380
+%              if grad<=-2.5 %second drop of potential
+%                 x_index01(n)=n;
+%             end                 
+%         end
     end    
 
 %now we find the actual position of x
-
+%%
 %first width
 recom_boundaries=[];
 recom_boundaries2=[];
@@ -224,11 +198,83 @@ end
 % width_2=recom_boundaries2(2)-recom_boundaries2(1);
 % width2=[width2, width_2];
 
-%     
-end
 
 
 %%
+
+
+%% relative recombionation 
+
+%need relative space charge layer widths
+%the width is the distance between the 2 curves being flat
+%width_r1= width of the 1st region in between green and white 
+%width_r2= width of region between white and blue 
+
+
+
+%%
+
+%recombination rates
+
+%% integrate rx to give tot_r (area under rx graph)
+
+x=[];
+y=[];
+tot_r=[];
+
+for i=1:length(var)
+    [x y]=rx(length(var),i,var(i),sol_OC(i));
+   tot_r(i)=trapz(x*1e-7,y);
+
+end   
+
+%% finding recombination for chosen regions
+
+%setting up the values 
+
+Ncat=[0 0 0 0 0 0; 1.68E-05	2.00E-05	4.77E-05	4.77E-05	6.00E-05	6.80E-05
+;1.55E-05	2.00E-05	4.50E-05	4.50E-05	6.00E-05	6.36E-05
+;1.04969E-05	2.00E-05	0.000039768	4.17544E-05	6.00E-05	6.85828E-05
+;0.000010249	2.00E-05	0.000229958	5.75298E-05	6.00E-05	6.39767E-05;...
+1.02E-05	2.00E-05	2.52E-05	0.0000581	6.00E-05	0.0000647];
+
+%Ncat=[{},{1.68E-05,2.00E-05,4.77E-05,4.77E-05,6.00E-05,6.80E-05},{1.55E-05,2.00E-05,4.50E-05,4.50E-05,6.00E-05,6.36E-05},{1.04969E-05,2.00E-05,0.000039768,4.17544E-05,6.00E-05,6.85828E-05}...
+%,{0.000010249,2.00E-05,0.000229958,5.75298E-05,6.00E-05,6.39767E-05},{1.02E-05,2.00E-05,2.52E-05,0.0000581,6.00E-05,0.0000647}];
+
+%%
+
+
+
+for i=1:length(var)
+   [x y]=rx(length(var),i,var(i),sol_OC(i));
+   x1=x(Ncat(i,1):Ncat(i,2));
+   y1=y(Ncat(i,1):Ncat(i,2));
+
+
+end   
+
+
+
+ 
+
+%%
+
+
+
+%%
+
+ function [x y]=rx(leng,loop_index,value,varargin)
+            % Recombination rates as a function of position
+            [sol, tarr, pointtype, xrange] = dfplot.sortarg(varargin);
+            [u,t,x,par,dev,n,p,a,c,V] = dfana.splitsol(sol);
+            x_sub = par.x_sub;
+            r = dfana.calcr(sol, "sub");
+            y=r.tot(100,:);
+            x=x_sub*1e7;
+            
+           
+        end
+
 %% funciton to get the inflection point 
 %for electrostatic graphs  which dont have a clear straight line at the mid
 %need to make a function to find 2nd inflection point
@@ -243,12 +289,6 @@ function curv=inflection(x,V)
     
 end
 
-%% relative recombionation 
-
-%need relative space charge layer widths
-%the width is the distance between the 2 curves being flat
-%width_r1= width of the 1st region in between green and white 
-%width_r2= width of region between white and blue 
 
 
 %% 
@@ -260,15 +300,6 @@ function dif=differential(x,V)
     dif=dVp./dx;
 
 end
-
-%%
-
-%find when difference between dV/dx is more than 0.0001
-
-
-
-
-
 
 
 
