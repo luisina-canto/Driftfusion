@@ -316,14 +316,14 @@ classdef df2plot
             ylabel('Position [cm]')
         end
 
-        function Vx(loop_index,variable, varargin)
+        function Vx(leng,loop_index,value,varargin)
             % Electrostatic potential as a function of position
             [sol, tarr, pointtype, xrange] = dfplot.sortarg(varargin);
             [u,t,x,par,dev,n,p,a,c,V] = dfana.splitsol(sol);
 
             figure(loop_index);
             hold on
-            df2plot.x2d(variable,sol, x, {V},{'V'},{'-'},'Electrostatic potential [V]', tarr, xrange, 0, 0);
+            df2plot.x2d(leng, loop_index, value,sol, x, {V},{'V'},{'-'},'Electrostatic potential [V]', tarr, xrange, 0, 0);
             hold on
             
         end
@@ -399,16 +399,18 @@ classdef df2plot
             zlabel('Generation rate [cm^{-3}s^{-1}]')
         end
 
-        function rx(varargin)
+        function rx(leng,loop_index,value,varargin)
             % Recombination rates as a function of position
             [sol, tarr, pointtype, xrange] = dfplot.sortarg(varargin);
             [u,t,x,par,dev,n,p,a,c,V] = dfana.splitsol(sol);
             x_sub = par.x_sub;
-            r = dfana.calcr(sol, "sub");
 
-            figure(17)
-            dfplot.x2d(sol, x_sub, {r.btb, r.srh, r.vsr, r.tot},{'rbtb', 'rsrh', 'rvsr', 'rtot'},...
-                {'-','-','-','-'}, 'Recombination rate [cm-3s-1]', tarr, xrange, 0, 0);
+            r = dfana.calcr(sol, "sub");
+            total_r=r.tot;
+
+            figure(loop_index);
+            df2plot.x2d(leng,loop_index, value ,sol, x_sub, {r.tot},{'rtot'},...
+                {'-'}, 'Recombination rate [cm-3s-1]', tarr, xrange, 0, 0);
         end
 
         function rsrhx(varargin)
@@ -628,21 +630,22 @@ classdef df2plot
             dfplot.x2d(sol, x, {-V},{'V'},{'-'},'-Electrostatic potential [V]', tarr, xrange, 0, 0);
         end
 
-        function ELx(varargin)
+        function ELx(leng,loop_index,value, varargin)
             % Energy Level diagram, and charge densities plotter
             % SOL = the solution structure
             % TARR = An array containing the times that you wish to plot
             % XRANGE = 2 element array with [xmin, xmax]
-            [sol, tarr, plots, pointtype, xrange] = df2plot.sortarg(varargin);
+            [sol, tarr, pointtype, xrange] = dfplot.sortarg(varargin);
             [u,t,x,par,dev,n,p,a,c,V] = dfana.splitsol(sol);
             [Ecb, Evb, Efn, Efp] = dfana.calcEnergies(sol);
 
-            for i = 1:plots
-                figure(i);
-                dfplot.x2d(sol, x, {Efn, Efp, Ecb, Evb}, {'E_{fn}', 'E_{fp}', 'E_{CB}', 'E_{VB}'},...
-                    {'--', '--', '-', '-'}, 'Energy [eV]', tarr, xrange, 0, 0)
-            end
-        end     
+            figure(loop_index);
+            df2plot.x2d(leng, loop_index,value,sol, x, {Efn, Efp, Ecb, Evb}, {'E_{fn}', 'E_{fp}', 'E_{CB}', 'E_{VB}'},...
+                {'--', '--', '-', '-'}, 'Energy [eV]', tarr, xrange, 0, 0)
+       
+     end
+   %  't = ', num2str(tarr(i)),
+  
         
         function ELx_uncontacted(varargin)
             % Energy Level diagram, and charge densities plotter
@@ -794,7 +797,7 @@ classdef df2plot
             hold on
         end
 
-        function [sol, tarr, plots, pointtype, xrange] = sortarg(args)
+        function [sol, tarr, pointtype, xrange] = sortarg(args)
 
             if length(args) == 1
                 sol = args{1};
@@ -809,21 +812,12 @@ classdef df2plot
             elseif length(args) == 3
                 sol = args{1};
                 tarr = args{2};
-                plots = args{3}
-                xrange = [sol.x(1), sol.x(end)]*1e7;    %
+                xrange = args{3};
                 pointtype = 't';
-            elseif length(args) == 4
-                sol = args{1};
-                tarr = args{2};
-                plots = args{3}
-                xrange = args{4};
-                pointtype = 't';    
-                
             end
         end
 
-        function x2d(variable,sol, xmesh, variables, legstr, linestyle, ylab, tarr, xrange, logx, logy)
-            % variable= variable we are changing to label the legend
+        function x2d(leng,loop_index, value,sol, xmesh, variables, legstr, linestyle, ylab, tarr, xrange, logx, logy)
             % SOL = solution structure
             % VARIABLES is an array containing the variables for plotting
             % LEGSTR is the legend string
@@ -832,6 +826,7 @@ classdef df2plot
             % XRANGE - limits of the plot as a two element vector
             % LOGX, LOGY - switches for log axes
             ax = gca;
+          
             if ishold(ax) == 0
                 cla(ax);    % Clear current axis if held
             end
@@ -852,31 +847,36 @@ classdef df2plot
                         dfplot.colourblocks(sol, [vmin-(vrange*0.2), vmax+(vrange*0.2)]);
                     case 1
                         dfplot.colourblocks(sol, [0.1*vmin, 10*vmax]);
-                      
                 end
             end
 
             vmin_tarr = zeros(length(tarr),length(variables));
             vmax_tarr = zeros(length(tarr),length(variables));
             h = zeros(1, length(variables));
+            cmap=colormap('cool');
+            col = (floor(length(cmap)/leng))*loop_index;
 
-            hold on
+             
+
             for i = 1:length(tarr)
                 % find the time
                 p1 = find(sol.t <= tarr(i));
                 p1 = p1(end);
-                hold on
+                
                 for jj = 1:length(variables)
                     vtemp = variables{jj};
 
                     vmin_tarr(i,jj) = min(vtemp(p1, :));
                     vmax_tarr(i,jj) = max(vtemp(p1, :));
 
-                    h(i,jj) = plot(xnm, variables{jj}(p1, :), char(linestyle(jj)));
-                hold on
+                    h(i,jj) = plot(xnm, variables{jj}(p1, :) ,char(linestyle(jj)),'color',cmap(col,:));
+
+        
                 end
                 hold on
             end
+            hold on
+
             xlabel('Position [nm]')
             ylabel(ylab)
             if logy == 1
@@ -884,19 +884,16 @@ classdef df2plot
             end
             if logx == 1
                 set(gca, 'XScale','log');
-
             end
             if length(variables) == 1
                 mystr = [];
-                for i = 1:length(variable)
-                    mystr = [mystr, string(['Ncat = ', num2str(variable)])];
-                   % [mystr, string([num2str('Ncat=', variable)])]; % edited this to change legend to variable
+                for i = 1:length(tarr)
+                    mystr = [mystr, string(['EF0 = ', num2str(value)])];
                 end
                 lgd = legend(h, mystr);
             else
                 lgd = legend(h(1,:), legstr);
             end
-            hold on
             lgd.FontSize = 12;
             xlim([xrange(1), xrange(2)])
             ymin = min(min(vmin_tarr));
@@ -917,7 +914,7 @@ classdef df2plot
             end
             set(gca, 'Layer', 'top')
             box on
-            hold on %change back to hold off?
+            hold off
         end
     end
 end
