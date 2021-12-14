@@ -73,11 +73,25 @@ if figson
     
     plot(V(1:num_values), zeros(1,num_values), 'black', 'LineWidth', 1)
     hold off
-    xlim([0, sol.par.V_fun_arg(2)])
     xlabel('Voltage (V)')
-    ylim([-0.025, 0.025])
     ylabel('Current Density (Acm^{-2})')
     legend({'J_{gen}', 'J_{rad}', 'J_{SRH, bulk}', 'J_{surf, l}', 'J_{surf, r}', 'J_{interface 1}', 'J_{interface 2}', 'J_{ext}'}, 'Location', 'bestoutside')
+
+    figure(301)
+    plot(t, J_gen, '--', t, J_btb, t, J_srh_bulk, t, J_surf_l, t, J_surf_r)
+    hold on
+    for i = 1:length(loc)
+        plot(t, J_vsr(i, :))
+    end
+    plot(t, J_tot, 'k')
+    
+    plot(t, zeros(1, num_values), 'black', 'LineWidth', 1)
+    hold off
+    xlim([0, t(end)])
+    xlabel('Times (s)')
+    ylabel('Current Density (Acm^{-2})')
+    legend({'J_{gen}', 'J_{rad}', 'J_{SRH, bulk}', 'J_{surf, l}', 'J_{surf, r}', 'J_{interface 1}', 'J_{interface 2}', 'J_{ext}'}, 'Location', 'bestoutside')
+
 end
 
 end
