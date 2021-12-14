@@ -42,7 +42,7 @@ par = pc(input_csv);
 % EF0_arr = [-4.6, -4.7, -4.8];
 % Ncat_arr = [1e15, 1e16, 1e17, 1e18, 1e19];
 %EF0_arr = -4.7;
-Ncat_arr = [1e14,1e15,1e16,1e17,1e18,1e19];
+Ncat_arr = [1e15, 1e16, 1e17, 1e18, 1e19];
 
 % Calculating tghe mobility which varies with the reciprocal of ion
 % concentration to give a constant conductivity
