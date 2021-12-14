@@ -613,7 +613,7 @@ classdef df2plot
             dfplot.x2d(sol, x, {V},{'V'},{'-'},'Electrostatic potential [V]', tarr, xrange, 0, 0);
         end
 
-        function rhoxVx(varargin)
+        function rhoxVx(leng,loop_index,value,varargin)
             % Three panel figure:
             % Volumetric charge density (rho), Field and potential as a funciton of position
             % A time array can be used as a second input argument
@@ -622,12 +622,12 @@ classdef df2plot
 
             rho = dfana.calcrho(sol, "whole");
 
-            figure(211)
+            figure(loop_index)
             subplot(2, 1, 1)
-            dfplot.x2d(sol, x, {rho},{'\rho'},{'-'}, 'Charge density [cm-3]', tarr, xrange, 0, 0);
+            df2plot.x2d(leng,loop_index,value, sol, x, {rho},{'\rho'},{'-'}, 'Charge density [cm-3]', tarr, xrange, 0, 0);
 
             subplot(2, 1, 2)
-            dfplot.x2d(sol, x, {-V},{'V'},{'-'},'-Electrostatic potential [V]', tarr, xrange, 0, 0);
+            df2plot.x2d(leng,loop_index,value,sol, x, {-V},{'V'},{'-'},'-Electrostatic potential [V]', tarr, xrange, 0, 0);
         end
 
         function ELx(leng,loop_index,value, varargin)
@@ -888,14 +888,14 @@ classdef df2plot
             if length(variables) == 1
                 mystr = [];
                 for i = 1:length(tarr)
-                    mystr = [mystr, string(['EF0 = ', num2str(value)])];
+                    mystr = [mystr, string(['Ncat= ', num2str(value)])];
                 end
                 lgd = legend(h, mystr);
             else
                 lgd = legend(h(1,:), legstr);
             end
             lgd.FontSize = 12;
-            xlim([xrange(1), xrange(2)])
+            xlim([xrange(1), 700])%
             ymin = min(min(vmin_tarr));
             ymax = max(max(vmax_tarr));
             yrange = ymax - ymin;
