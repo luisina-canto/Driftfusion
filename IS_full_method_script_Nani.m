@@ -90,7 +90,7 @@ deltaV = 2e-3;
 frozen_ions = false;
 demodulation = true;
 do_graphics = false;
-parfor i = 5
+parfor i = 6
     i
     % IS_results = IS_script(structs, startFreq, endFreq, Freq_points, deltaV, frozen_ions, demodulation, do_graphics)
     sol_IS_SC(i) = IS_script(soleq(i).ion, startFreq, endFreq, Freq_points, deltaV, frozen_ions, demodulation, do_graphics);
