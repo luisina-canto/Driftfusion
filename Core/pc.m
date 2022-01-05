@@ -147,8 +147,8 @@ classdef pc
         N_ionic_species = 1;
         Nani = [1e19];                  % Mobile ion defect density [cm-3] - A. Walsh et al. Angewandte Chemie, 2015, 127, 1811.
         Ncat = [1e19];                  % Mobile ion defect density [cm-3] - A. Walsh et al. Angewandte Chemie, 2015, 127, 1811.
-        z_c = 1;                        % Integer charge state for cations
-        z_a = -1;                       % Integer charge state for anions
+        z_c = -1;                        % Integer charge state for cations
+        z_a = 1;                       % Integer charge state for anions
         % Limits the density of ions - Approximate density of iodide sites [cm-3]
         a_max = [1.21e22];                 % P. Calado thesis
         c_max = [1.21e22];
