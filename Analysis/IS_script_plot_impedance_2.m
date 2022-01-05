@@ -91,7 +91,7 @@ col = (floor(length(Int_colors)/leng))*loop;
             'MarkerFaceColor', Int_colors(col, :), 'Marker', 's',...
             'MarkerSize', 3, 'LineWidth', 1.3,'DisplayName',leg);
         lgd = legend;
-        lgd.Title.String = 'Active Layer Thickness';
+        lgd.Title.String = 'Cation Density';
         hold on
         % for plotting the negative capacitance
 %         plot(IS_results.Freq(i, :), -IS_results.cap(i, :)',...
@@ -134,7 +134,7 @@ if isfield(IS_results, 'Jtot_phase') % just IS have phase output
                 'MarkerFaceColor', Int_colors(col, :), 'Marker', 's',...
                 'MarkerSize', 3, 'LineWidth', 1.3,'DisplayName',leg);
             lgd = legend;
-            lgd.Title.String = 'Active Layer Thickness';
+            lgd.Title.String = 'Cation Density';
             hold on
 %             plot(IS_results.Freq(i, :), -IS_results.impedance_ion_disp_im(i, :)', 'Color', Int_colors(i, :), 'LineStyle', '--', 'LineWidth', 1);
 %             plot(IS_results.Freq(i, :), -IS_results.impedance_cat_disp_im(i, :)', 'Color', Int_colors(i, :), 'LineStyle', '--', 'LineWidth', 1, 'Marker', '+');
@@ -161,7 +161,7 @@ if isfield(IS_results, 'Jtot_phase') % just IS have phase output
                 'MarkerFaceColor', Int_colors(col, :), 'Marker', 's',...
                 'MarkerSize', 3, 'LineWidth', 1.3,'DisplayName',leg);
             lgd = legend;
-            lgd.Title.String = 'Active Layer Thickness';
+            lgd.Title.String = 'Cation Density';
             hold on
 %             plot(IS_results.Freq(i, :), IS_results.impedance_ion_disp_re(i, :)', 'Color', Int_colors(i, :), 'LineStyle', '--', 'LineWidth', 1);
 %             plot(IS_results.Freq(i, :), IS_results.impedance_cat_disp_re(i, :)', 'Color', Int_colors(i, :), 'LineStyle', '--', 'LineWidth', 1, 'Marker', '+');
@@ -187,7 +187,8 @@ if isfield(IS_results, 'Jtot_phase') % just IS have phase output
                 'Color', Int_colors(col, :), 'MarkerEdgeColor', Int_colors(col, :),...
                 'MarkerFaceColor', Int_colors(col, :), 'Marker', 's',...
                 'MarkerSize', 3, 'LineWidth', 1.3,'DisplayName',leg);
-            legend;
+            lgd = legend;
+            lgd.Title.String = 'Cation Density';
             hold on
 %             plot(IS_results.Freq(i, :), IS_results.impedance_ion_disp_abs(i, :)', 'Color', Int_colors(i, :), 'LineStyle', '--', 'LineWidth', 1);
 %             plot(IS_results.Freq(i, :), IS_results.impedance_cat_disp_abs(i, :)', 'Color', Int_colors(i, :), 'LineStyle', '--', 'LineWidth', 1, 'Marker', '+');

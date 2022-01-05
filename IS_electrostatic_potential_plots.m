@@ -66,7 +66,6 @@ end
 %% plotting VX
 
 for i = 1:length(var)
-                
                 df2plot.Vx(length(var),i,var(i),sol_OC(i));
                
 end

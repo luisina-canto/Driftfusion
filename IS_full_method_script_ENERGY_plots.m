@@ -84,7 +84,7 @@ scan_rate = 1e-4;
 
 for i = 1:length(Ncat_arr)
     
-    sol_CV(i) = doCV(soleq(i).ion, light_intensity, 0, Vmax, Vmin, scan_rate, 1, 401);
+    sol_CV(i) = doCV(soleq(i).ion, light_intensity, 0.5, Vmax, Vmin, scan_rate, 1, 401);
 
 end
 

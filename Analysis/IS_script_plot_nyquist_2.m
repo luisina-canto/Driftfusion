@@ -83,7 +83,7 @@ col = (floor(length(Int_colors)/leng))*loop;
             'MarkerSize', 3, 'LineWidth', 1.3,'DisplayName',leg);
         hold on
         lgd = legend;
-        lgd.Title.String = 'Active Layer Thickness';
+        lgd.Title.String = 'Cation Density';
         % add bigger markers for the points of the even decades
 %         plot(IS_results.impedance_re(i, evendecade_index), -IS_results.impedance_im(i, evendecade_index)',...
 %             'MarkerFaceColor', Int_colors(i, :), 'MarkerEdgeColor', Int_colors(i, :),...

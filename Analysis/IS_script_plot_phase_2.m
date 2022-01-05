@@ -89,7 +89,7 @@ col = (floor(length(Int_colors)/leng))*loop;
             'MarkerFaceColor', Int_colors(col, :), 'Marker', 's',...
             'MarkerSize', 3, 'LineWidth', 1.3,'DisplayName',leg);
         lgd = legend;
-        lgd.Title.String = 'Active Layer Thickness';
+        lgd.Title.String = 'Cation Density';
         hold on
         % plot ionic displacement current phase
 %         plot(IS_results.Freq(i, :), -phase_i_deg(i, :)', 'Color', Int_colors(i, :), 'LineStyle', '--', 'LineWidth', 1);
