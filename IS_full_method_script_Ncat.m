@@ -41,17 +41,16 @@ par = pc(input_csv);
 
 % Ncat_arr = [1e15, 1e16, 1e17, 1e18, 1e19];
 %EF0_arr = -4.7;
-Nani_arr = [1e14,1e15,1e16,1e17,1e18,1e19];
+Nani_arr = [1e14, 1e15, 1e16, 1e17, 1e18, 1e19];
 par.N_ionic_species = 1;
  
-
 % Calculating tghe mobility which varies with the reciprocal of ion
 % concentration to give a constant conductivity
 mu_a_arr = 1e19*1e-10./Nani_arr;
 
 cond = mu_a_arr .* Nani_arr
 
-for i = 1:length(Nani_arr)
+for i = 6%1:length(Nani_arr)
     par_struct(i) = par;
     
     par_struct(i).mu_c(3) = mu_a_arr(i);
@@ -70,10 +69,10 @@ for i = 1:length(Nani_arr)
 end
 
     %% Obtain open circuit initial condition
-for i = 1:length(Nani_arr)
+for i = 6%1:length(Nani_arr)
 
     % sol_ill = lightonRs(sol_ini, int1, stable_time, mobseti, Rs, pnts)
-    sol_Rs1e6(i) = lightonRs(soleq(i).ion, 0.5, -100, 1, 1e6, 100);
+    sol_Rs1e6(i) = lightonRs(soleq(i).ion, 0.5, -1e-2, 1, 1e6, 100);
     sol_OC(i) = RsToClosedCircuit(sol_Rs1e6(i));
     'This_works'
 end
@@ -87,7 +86,7 @@ deltaV = 2e-3;
 frozen_ions = false;
 demodulation = true;
 do_graphics = false;
-for i = 1:length(Nani_arr)
+for i = 6%1:length(Nani_arr)
     % IS_results = IS_script(structs, startFreq, endFreq, Freq_points, deltaV, frozen_ions, demodulation, do_graphics)
     sol_IS_SC(i) = IS_script(soleq(i).ion, startFreq, endFreq, Freq_points, deltaV, frozen_ions, demodulation, do_graphics);
     
