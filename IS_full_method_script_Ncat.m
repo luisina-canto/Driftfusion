@@ -42,7 +42,7 @@ par = pc(input_csv);
 % Ncat_arr = [1e15, 1e16, 1e17, 1e18, 1e19];
 %EF0_arr = -4.7;
 Nani_arr = [1e14,1e15,1e16,1e17,1e18,1e19];
-par.N_ionic_species = 2;
+par.N_ionic_species = 1;
  
 
 % Calculating tghe mobility which varies with the reciprocal of ion
@@ -51,29 +51,26 @@ mu_a_arr = 1e19*1e-10./Nani_arr;
 
 cond = mu_a_arr .* Nani_arr
 
-parfor i = 6
+for i = 1:length(Nani_arr)
     par_struct(i) = par;
     
-    par_struct(i).mu_a(3) = mu_a_arr(i);
-    %par_struct(i).mu_c(3) = 1e-5;
-    %par_struct(i).mu_c(3) = mu_a_arr(i);
+    par_struct(i).mu_c(3) = mu_a_arr(i);
     %mu_a_arr(i)
     % Below should make cation mobility zero but this makes an error for an
     % unknown reason?
-    par_struct(i).mu_c(3) = 0;
+    %par_struct(i).mu_c(3) = 0;
     
-    %par_struct(i).Ncat = [1,1,1,1,1];
-    par_struct(i).Nani = [Nani_arr(i), Nani_arr(i), Nani_arr(i), Nani_arr(i), Nani_arr(i)];
+    par_struct(i).Ncat = [Nani_arr(i), Nani_arr(i), Nani_arr(i), Nani_arr(i), Nani_arr(i)];
+    %par_struct(i).Nani = [Nani_arr(i), Nani_arr(i), Nani_arr(i), Nani_arr(i), Nani_arr(i)];
     
     % Everytime you change your parameters in a script use this function:
     par_struct(i) = refresh_device(par_struct(i));
     % soleq = equilibrate(varargin)
-    soleq(i) = equilibrate(par_struct(i)); 
-    i
+    soleq(i) = equilibrate(par_struct(i));
 end
 
     %% Obtain open circuit initial condition
-for i = 6
+for i = 1:length(Nani_arr)
 
     % sol_ill = lightonRs(sol_ini, int1, stable_time, mobseti, Rs, pnts)
     sol_Rs1e6(i) = lightonRs(soleq(i).ion, 0.5, -100, 1, 1e6, 100);
@@ -90,8 +87,7 @@ deltaV = 2e-3;
 frozen_ions = false;
 demodulation = true;
 do_graphics = false;
-parfor i = 5
-    i
+for i = 1:length(Nani_arr)
     % IS_results = IS_script(structs, startFreq, endFreq, Freq_points, deltaV, frozen_ions, demodulation, do_graphics)
     sol_IS_SC(i) = IS_script(soleq(i).ion, startFreq, endFreq, Freq_points, deltaV, frozen_ions, demodulation, do_graphics);
     
@@ -102,7 +98,7 @@ end
 %% Analysis plots
 % IS_script_exporter(prefix, IS_results)
 
-for i = 1:length(Nani_arr)-1
+for i = 1:length(Nani_arr)
     %IS_script_exporter('unit_testing_deleteme', sol_IS_OC(i))
 
     % IS_script_plot_impedance(IS_results)
